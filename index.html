@@ -1,508 +1,891 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Apuração Presidencial 2026</title>
+
 <style>
 :root {
   color-scheme: dark;
   --bg: #0b1220;
   --panel: #121d2d;
-  --line: #26364a;
+  --border: #293a50;
   --text: #eef4fb;
   --muted: #9fb0c5;
   --blue: #60a5fa;
   --red: #f87171;
-  --green: #34d399;
   --gold: #fbbf24;
+  --green: #34d399;
 }
+
 * { box-sizing: border-box; }
+
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font: 16px/1.5 system-ui, Arial, sans-serif;
 }
-main { max-width: 1100px; margin: auto; padding: 20px; }
-header { padding: 12px 0 18px; }
-h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin: 0 0 6px; }
-h2 { font-size: 1.1rem; margin: 0 0 12px; }
-.muted { color: var(--muted); }
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 18px;
+}
+
+h1 { font-size: 2rem; margin: 12px 0 5px; }
+h2 { font-size: 1.15rem; margin: 0 0 14px; }
+
+.muted, .small { color: var(--muted); }
+.small { font-size: .85rem; }
+
 .card {
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 14px;
+  padding: 17px;
+  margin: 15px 0;
 }
-.score { font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 800; }
-.row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
-.pill { font-size: .78rem; border-radius: 99px; padding: 4px 9px; background: #203047; color: #d9e7f7; }
-.status { font-size: .9rem; color: var(--muted); margin-top: 8px; }
-.chart-wrap { width: 100%; overflow: hidden; }
-svg { display: block; width: 100%; height: auto; min-height: 260px; }
-.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: .85rem; color: var(--muted); margin: 8px 0; }
-.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
-.warning { border-left: 3px solid var(--gold); padding: 8px 12px; background: #211f19; color: #f5e8c8; font-size: .9rem; }
-.small { font-size: .82rem; color: var(--muted); }
-button { background: #203047; color: var(--text); border: 1px solid #3a506d; border-radius: 10px; padding: 10px 13px; font: inherit; }
-footer { padding: 8px 0 24px; }
-@media (max-width: 650px) {
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.badge {
+  background: #23344c;
+  color: #dce8f7;
+  border-radius: 30px;
+  padding: 5px 10px;
+  font-size: .8rem;
+}
+
+.score {
+  font-size: clamp(1.7rem, 5vw, 2.4rem);
+  font-weight: 800;
+}
+
+.candidate {
+  flex: 1;
+  min-width: 0;
+}
+
+.candidate:last-child { text-align: right; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 10px 0;
+  color: var(--muted);
+  font-size: .85rem;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1px solid #425a79;
+  background: #23344c;
+  color: white;
+  font: inherit;
+}
+
+.notice {
+  padding: 12px;
+  border-left: 4px solid var(--gold);
+  background: #252319;
+  color: #f7e8bf;
+  font-size: .9rem;
+}
+
+footer {
+  color: var(--muted);
+  font-size: .8rem;
+  padding: 12px 0 28px;
+}
+
+@media(max-width:650px) {
   main { padding: 12px; }
   .grid { grid-template-columns: 1fr; }
-  .card { padding: 13px; }
+  .card { padding: 14px; }
 }
 </style>
 </head>
+
 <body>
 <main>
 
 <header>
-  <div class="pill">BRASIL · ELEIÇÃO PRESIDENCIAL 2026</div>
+  <span class="badge">BRASIL · ELEIÇÃO PRESIDENCIAL 2026</span>
   <h1>Apuração presidencial</h1>
-  <div class="muted">Resultados, evolução da apuração e projeção baseada no 1º turno.</div>
+  <p class="muted">
+    Resultados, evolução da apuração e projeção baseada no primeiro turno.
+  </p>
 </header>
 
 <section class="grid">
+
   <div class="card">
     <div class="row">
       <h2>1º turno · referência</h2>
-      <span class="pill" id="s1">Carregando…</span>
+      <span class="badge" id="status1">Consultando</span>
     </div>
+
     <div class="row">
-      <div>
+      <div class="candidate">
         <div class="muted">Flávio Bolsonaro</div>
         <div class="score" id="f1">—</div>
       </div>
-      <div style="text-align:right">
+
+      <div class="candidate">
         <div class="muted">Lula</div>
         <div class="score" id="l1">—</div>
       </div>
     </div>
-    <div class="status" id="meta1">Buscando dados…</div>
+
+    <p class="small" id="info1">Consultando a fonte de dados.</p>
   </div>
 
   <div class="card">
     <div class="row">
       <h2>2º turno · apuração</h2>
-      <span class="pill" id="s2">Carregando…</span>
+      <span class="badge" id="status2">Consultando</span>
     </div>
+
     <div class="row">
-      <div>
+      <div class="candidate">
         <div class="muted">Flávio Bolsonaro</div>
         <div class="score" id="f2">—</div>
       </div>
-      <div style="text-align:right">
+
+      <div class="candidate">
         <div class="muted">Lula</div>
         <div class="score" id="l2">—</div>
       </div>
     </div>
-    <div class="status" id="meta2">Buscando dados…</div>
+
+    <p class="small" id="info2">Consultando a fonte de dados.</p>
   </div>
+
 </section>
 
 <section class="card">
   <div class="row">
     <h2>Curva da apuração</h2>
-    <span class="pill" id="chartStatus">Preparando gráfico</span>
+    <span class="badge" id="chartStatus">Carregando</span>
   </div>
 
   <div class="legend">
-    <span><i class="dot" style="background:var(--blue)"></i>Flávio · 2º turno</span>
-    <span><i class="dot" style="background:var(--red)"></i>Lula · 2º turno</span>
+    <span><i class="dot" style="background:var(--blue)"></i>Flávio</span>
+    <span><i class="dot" style="background:var(--red)"></i>Lula</span>
     <span><i class="dot" style="background:var(--gold)"></i>Projeção do 1º turno</span>
   </div>
 
-  <div class="chart-wrap">
-    <svg id="chart" viewBox="0 0 900 430" role="img" aria-label="Gráfico de evolução da apuração"></svg>
-  </div>
+  <svg id="chart" viewBox="0 0 800 430"
+       role="img" aria-label="Gráfico da apuração"></svg>
 
-  <div class="small" id="chartNote">
-    As amostras do segundo turno são guardadas neste navegador.
-  </div>
+  <p class="small" id="chartInfo">
+    Carregando o histórico de resultados.
+  </p>
 </section>
 
 <section class="card">
-  <h2>Sobre os dados</h2>
-  <p class="small">
-    O site consulta arquivos JSON e atualiza os dados automaticamente.
-    A curva histórica completa do primeiro turno ainda depende de acesso
-    ao arquivo histórico.
+  <h2>Fontes e atualização</h2>
+
+  <p class="small" id="sourceInfo">
+    Consultando a API pública.
   </p>
 
-  <div class="warning">
-    Este é um painel independente, não oficial do TSE.
-    Confira os resultados nas fontes oficiais da Justiça Eleitoral.
+  <p class="small" id="updated">
+    Última consulta: aguardando.
+  </p>
+
+  <div class="notice">
+    Painel independente. A fonte alternativa não é o TSE.
+    O histórico pode ter lacunas e a última consulta não garante
+    que os dados de origem sejam atuais.
   </div>
 
-  <p class="small" id="sourceStatus">Verificando fontes…</p>
-  <button id="refresh">Atualizar agora</button>
+  <br>
+  <button onclick="atualizar()">Atualizar agora</button>
 </section>
 
-<footer class="small">
-  Atualização automática a cada 60 segundos · Dados sujeitos à disponibilidade das fontes.
+<footer>
+  Atualização automática a cada 60 segundos.
 </footer>
+
 </main>
 
 <script>
-const URLS = {
-  primeiro: "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
-  segundo: "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json"
+"use strict";
+
+const API = "https://placardovoto.com/api/public/v1";
+
+const ENDPOINTS = {
+  primeiro: API + "/resultados/2026/1/presidente/br/",
+  segundo: API + "/resultados/2026/2/presidente/br/",
+  historico: API + "/historico/2026/1/presidente/br/"
 };
 
 const $ = id => document.getElementById(id);
 
-const fmt = n =>
-  Number(n).toLocaleString("pt-BR", {
+const numero = valor => {
+  if (valor === null || valor === undefined || valor === "") {
+    return NaN;
+  }
+
+  if (typeof valor === "number") return valor;
+
+  return Number(
+    String(valor)
+      .replace(/\s/g, "")
+      .replace("%", "")
+      .replace(",", ".")
+  );
+};
+
+const percentual = valor => {
+  if (!Number.isFinite(valor)) return "—";
+
+  return valor.toLocaleString("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }) + "%";
-
-const fmtInt = n => Number(n || 0).toLocaleString("pt-BR");
-
-const storageKey = "apuracao_presidente_2026_history_v2";
-
-let state = {
-  first: null,
-  second: null,
-  samples: []
 };
 
-function num(v) {
-  if (v === undefined || v === null || v === "") return NaN;
-  return Number(String(v).replace(",", "."));
+const inteiro = valor => {
+  if (!Number.isFinite(valor)) return "—";
+  return Math.round(valor).toLocaleString("pt-BR");
+};
+
+async function consultar(url) {
+  const resposta = await fetch(url, {
+    method: "GET",
+    cache: "no-store",
+    headers: { "Accept": "application/json" }
+  });
+
+  if (!resposta.ok) {
+    throw new Error("HTTP " + resposta.status);
+  }
+
+  return await resposta.json();
 }
 
-function findCandidates(data) {
-  const candidates = [];
+/*
+  A API pode colocar os dados dentro de result, results,
+  history ou outras estruturas. Estas funções procuram
+  os candidatos recursivamente.
+*/
 
-  function walk(obj) {
-    if (!obj || typeof obj !== "object") return;
+function objetosDeCandidatos(dados) {
+  const encontrados = [];
+  const visitados = new WeakSet();
+
+  function percorrer(obj, profundidade = 0) {
+    if (
+      !obj ||
+      typeof obj !== "object" ||
+      profundidade > 15 ||
+      visitados.has(obj)
+    ) return;
+
+    visitados.add(obj);
 
     if (Array.isArray(obj)) {
-      obj.forEach(walk);
+      for (const item of obj) {
+        percorrer(item, profundidade + 1);
+      }
       return;
     }
 
-    const keys = Object.keys(obj);
+    const nome =
+      obj.name ??
+      obj.nome ??
+      obj.nm ??
+      obj.candidateName ??
+      obj.candidato ??
+      "";
 
-    if (keys.some(k =>
-      ["n", "nm", "vap", "pvap", "cand", "candidato"]
-        .includes(k.toLowerCase())
-    )) {
-      const name = obj.nm || obj.nome || obj.candidato || obj.cand || "";
-      const number = String(obj.n || obj.numero || obj.num || "");
-      const votes = num(obj.vap || obj.votos || obj.votosNominais || obj.qtVotos);
-      const pct = num(obj.pvap || obj.pct || obj.percentual || obj.porcentagem);
+    const numeroCandidato = String(
+      obj.number ??
+      obj.numero ??
+      obj.n ??
+      obj.candidateNumber ??
+      ""
+    );
 
-      if (name || number) {
-        candidates.push({ name: String(name), number, votes, pct });
+    const temIdentificacao =
+      numeroCandidato !== "" || nome !== "";
+
+    if (temIdentificacao) {
+      encontrados.push(obj);
+    }
+
+    for (const [chave, valor] of Object.entries(obj)) {
+      if (valor && typeof valor === "object") {
+        percorrer(valor, profundidade + 1);
       }
     }
+  }
 
-    for (const k of keys) {
-      if (obj[k] && typeof obj[k] === "object") walk(obj[k]);
+  percorrer(dados);
+
+  return encontrados;
+}
+
+function nomeDoCandidato(c) {
+  return String(
+    c.name ??
+    c.nome ??
+    c.nm ??
+    c.candidateName ??
+    c.candidato ??
+    ""
+  ).toLowerCase();
+}
+
+function numeroDoCandidato(c) {
+  return String(
+    c.number ??
+    c.numero ??
+    c.n ??
+    c.candidateNumber ??
+    ""
+  );
+}
+
+function localizarCandidato(dados, numeroAlvo, nomeAlvo) {
+  const candidatos = objetosDeCandidatos(dados);
+
+  return candidatos.find(c =>
+    numeroDoCandidato(c) === numeroAlvo
+  ) || candidatos.find(c =>
+    nomeDoCandidato(c).includes(nomeAlvo)
+  ) || null;
+}
+
+function lerPercentual(candidato) {
+  if (!candidato) return NaN;
+
+  const campos = [
+    "percentage",
+    "percentual",
+    "percentageVotes",
+    "percentualVotos",
+    "pvap",
+    "porcentagem",
+    "pct",
+    "percent"
+  ];
+
+  for (const campo of campos) {
+    const valor = numero(candidato[campo]);
+
+    if (Number.isFinite(valor)) {
+      return valor;
     }
   }
 
-  walk(data);
+  const votos = lerVotos(candidato);
 
-  const unique = new Map();
-  candidates.forEach(c => unique.set(c.number + "|" + c.name, c));
+  if (Number.isFinite(votos)) {
+    return NaN;
+  }
 
-  return [...unique.values()];
+  return NaN;
 }
 
-function getTotals(data) {
-  const all = findCandidates(data);
+function lerVotos(candidato) {
+  if (!candidato) return NaN;
 
-  function match(number, words) {
-    return all.find(c => c.number === number) ||
-      all.find(c => words.some(w => c.name.toLowerCase().includes(w)));
+  const campos = [
+    "votes",
+    "votos",
+    "voteCount",
+    "votosNominais",
+    "vap",
+    "qtVotos",
+    "totalVotes"
+  ];
+
+  for (const campo of campos) {
+    const valor = numero(candidato[campo]);
+
+    if (Number.isFinite(valor)) return valor;
   }
 
-  const f = match("22", ["flávio", "flavio"]);
-  const l = match("13", ["lula"]);
+  return NaN;
+}
 
-  const totalValid =
-    num(data?.vvc) ||
-    num(data?.votosValidos) ||
-    num(data?.vv);
+function lerTotalValido(dados) {
+  const chaves = [
+    "validVotes",
+    "votosValidos",
+    "totalValidVotes",
+    "totalValid",
+    "vvc",
+    "vv"
+  ];
 
-  let fp = f?.pct;
-  let lp = l?.pct;
+  for (const chave of chaves) {
+    const valor = numero(dados?.[chave]);
 
-  if (!Number.isFinite(fp) && Number.isFinite(f?.votes) && totalValid > 0) {
-    fp = f.votes / totalValid * 100;
+    if (Number.isFinite(valor) && valor > 0) {
+      return valor;
+    }
   }
 
-  if (!Number.isFinite(lp) && Number.isFinite(l?.votes) && totalValid > 0) {
-    lp = l.votes / totalValid * 100;
+  if (dados?.result) {
+    return lerTotalValido(dados.result);
   }
 
-  if (Number.isFinite(fp) && fp > 100) fp /= 100;
-  if (Number.isFinite(lp) && lp > 100) lp /= 100;
+  return NaN;
+}
 
-  const sections =
-    num(data?.s) ||
-    num(data?.secoesApuradas) ||
-    num(data?.st);
+function lerResultado(dados) {
+  const flavio = localizarCandidato(dados, "22", "flávio");
+  const lula = localizarCandidato(dados, "13", "lula");
+
+  let f = lerPercentual(flavio);
+  let l = lerPercentual(lula);
+
+  const fv = lerVotos(flavio);
+  const lv = lerVotos(lula);
+
+  const totalValido = lerTotalValido(dados);
+
+  if (!Number.isFinite(f) && Number.isFinite(fv) &&
+      Number.isFinite(totalValido)) {
+    f = fv / totalValido * 100;
+  }
+
+  if (!Number.isFinite(l) && Number.isFinite(lv) &&
+      Number.isFinite(totalValido)) {
+    l = lv / totalValido * 100;
+  }
+
+  const secoes = numero(
+    dados?.result?.sectionsCount ??
+    dados?.result?.sections ??
+    dados?.sectionsCount ??
+    dados?.secoesApuradas ??
+    dados?.s
+  );
 
   return {
-    f: fp,
-    l: lp,
-    fVotes: f?.votes,
-    lVotes: l?.votes,
-    sections,
-    all
+    f,
+    l,
+    fv,
+    lv,
+    secoes,
+    dados
   };
 }
 
-async function fetchJSON(url) {
-  const response = await fetch(url, { cache: "no-store" });
-
-  if (!response.ok) {
-    throw new Error("HTTP " + response.status);
-  }
-
-  return await response.json();
+function lerDataFonte(dados) {
+  return (
+    dados?.freshness?.sourceUpdatedAt ||
+    dados?.freshness?.lastCheckedAt ||
+    dados?.retrievedAt ||
+    null
+  );
 }
 
-function loadSaved() {
+function formatarData(valor) {
+  if (!valor) return "Não informada";
+
+  const data = new Date(valor);
+
+  if (Number.isNaN(data.getTime())) return String(valor);
+
+  return data.toLocaleString("pt-BR");
+}
+
+/* Histórico local do segundo turno. */
+
+const CHAVE_LOCAL = "apuracao2026_parciais_v3";
+
+let estado = {
+  primeiro: null,
+  segundo: null,
+  historico: [],
+  amostras: []
+};
+
+function carregarAmostras() {
   try {
-    const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
-    if (Array.isArray(saved)) state.samples = saved;
-  } catch (e) {
-    state.samples = [];
+    const dados = JSON.parse(
+      localStorage.getItem(CHAVE_LOCAL) || "[]"
+    );
+
+    if (Array.isArray(dados)) estado.amostras = dados;
+  } catch (_) {
+    estado.amostras = [];
   }
 }
 
-function saveSample() {
-  const s = state.second;
+function guardarAmostra(resultado) {
+  if (
+    !resultado ||
+    !Number.isFinite(resultado.f) ||
+    !Number.isFinite(resultado.l)
+  ) return;
 
-  if (!s || !Number.isFinite(s.f) || !Number.isFinite(s.l)) return;
+  const ultima = estado.amostras.at(-1);
 
-  const sample = {
+  const amostra = {
     t: Date.now(),
-    f: s.f,
-    l: s.l,
-    sections: s.sections
+    f: resultado.f,
+    l: resultado.l,
+    secoes: resultado.secoes
   };
 
-  const last = state.samples[state.samples.length - 1];
-
   if (
-    !last ||
-    Math.abs(last.f - sample.f) > 0.001 ||
-    Math.abs(last.l - sample.l) > 0.001 ||
-    Date.now() - last.t > 120000
+    !ultima ||
+    Math.abs(ultima.f - amostra.f) > 0.001 ||
+    Math.abs(ultima.l - amostra.l) > 0.001 ||
+    Date.now() - ultima.t > 120000
   ) {
-    state.samples.push(sample);
+    estado.amostras.push(amostra);
   }
 
-  state.samples = state.samples
-    .filter(x => Date.now() - x.t < 36 * 60 * 60 * 1000)
-    .slice(-600);
+  estado.amostras = estado.amostras
+    .filter(a => Date.now() - a.t < 7 * 24 * 60 * 60 * 1000)
+    .slice(-1000);
 
   try {
-    localStorage.setItem(storageKey, JSON.stringify(state.samples));
-  } catch (e) {}
+    localStorage.setItem(
+      CHAVE_LOCAL,
+      JSON.stringify(estado.amostras)
+    );
+  } catch (_) {}
 }
 
-function firstRoundReference() {
-  if (
-    state.first &&
-    Number.isFinite(state.first.f) &&
-    Number.isFinite(state.first.l)
-  ) {
-    return {
-      f: state.first.f,
-      l: state.first.l,
-      source: "TSE"
-    };
+/*
+  Extrai pontos do histórico.
+  Não cria pontos quando não encontra dados reconhecíveis.
+*/
+
+function extrairPontosHistoricos(dados) {
+  const colecao =
+    dados?.history ??
+    dados?.result?.history ??
+    dados?.data?.history ??
+    dados?.history?.items ??
+    dados?.items ??
+    dados?.updates ??
+    dados?.result?.updates ??
+    [];
+
+  if (!Array.isArray(colecao)) return [];
+
+  const pontos = [];
+
+  for (const item of colecao) {
+    const resultado = lerResultado(item);
+
+    if (
+      Number.isFinite(resultado.f) &&
+      Number.isFinite(resultado.l)
+    ) {
+      const instante =
+        item?.timestamp ??
+        item?.updatedAt ??
+        item?.sourceUpdatedAt ??
+        item?.time ??
+        item?.t ??
+        null;
+
+      pontos.push({
+        t: instante ? new Date(instante).getTime() : pontos.length,
+        f: resultado.f,
+        l: resultado.l
+      });
+    }
   }
 
+  return pontos.sort((a, b) => a.t - b.t);
+}
+
+function referenciaPrimeiroTurno() {
+  const p = estado.primeiro;
+
+  if (p && Number.isFinite(p.f) && Number.isFinite(p.l)) {
+    return { f: p.f, l: p.l, provisoria: false };
+  }
+
+  // Referência visual provisória, não resultado confirmado pela consulta.
+  return { f: 47.03, l: 45.16, provisoria: true };
+}
+
+function calcularProjecao(p) {
+  const soma = p.f + p.l;
+
+  if (!(soma > 0)) return { f: 50, l: 50 };
+
   return {
-    f: 47.03,
-    l: 45.16,
-    source: "referência de fallback"
+    f: p.f / soma * 100,
+    l: p.l / soma * 100
   };
 }
 
-function normalizedProjection(p) {
-  const sum = p.f + p.l;
-
-  if (sum <= 0) return { f: 50, l: 50 };
-
-  return {
-    f: p.f / sum * 100,
-    l: p.l / sum * 100
-  };
-}
-
-function render() {
-  const first = firstRoundReference();
-  const second = state.second;
-
-  $("f1").textContent = fmt(first.f);
-  $("l1").textContent = fmt(first.l);
-
-  $("s1").textContent =
-    first.source === "TSE" ? "Consultado" : "Referência";
-
-  $("meta1").textContent =
-    first.source === "TSE"
-      ? "Dados do arquivo consultado."
-      : "Referência provisória: 47,03% e 45,16%.";
-
-  if (second) {
-    $("f2").textContent =
-      Number.isFinite(second.f) ? fmt(second.f) : "—";
-
-    $("l2").textContent =
-      Number.isFinite(second.l) ? fmt(second.l) : "—";
-
-    $("s2").textContent = "Última consulta";
-
-    $("meta2").textContent =
-      "Seções apuradas: " +
-      (Number.isFinite(second.sections) ? fmtInt(second.sections) : "—");
-  }
-
-  drawChart(first);
-}
-
-function drawChart(first) {
+function desenharGrafico() {
   const svg = $("chart");
-  const W = 900;
+  const W = 800;
   const H = 430;
-  const pad = { l: 58, r: 22, t: 28, b: 48 };
-  const cw = W - pad.l - pad.r;
-  const ch = H - pad.t - pad.b;
 
-  const samples = state.samples.slice();
+  const margem = { l: 55, r: 20, t: 35, b: 45 };
+  const largura = W - margem.l - margem.r;
+  const altura = H - margem.t - margem.b;
+
+  const primeiro = referenciaPrimeiroTurno();
+  const projecao = calcularProjecao(primeiro);
+
+  let pontosPrimeiro = estado.historico;
+  let pontosSegundo = estado.amostras;
 
   if (
-    state.second &&
-    (!samples.length ||
-      samples[samples.length - 1].f !== state.second.f ||
-      samples[samples.length - 1].l !== state.second.l)
+    estado.segundo &&
+    Number.isFinite(estado.segundo.f) &&
+    Number.isFinite(estado.segundo.l)
   ) {
-    samples.push({
-      t: Date.now(),
-      f: state.second.f,
-      l: state.second.l
-    });
+    const ultima = pontosSegundo.at(-1);
+
+    if (
+      !ultima ||
+      ultima.f !== estado.segundo.f ||
+      ultima.l !== estado.segundo.l
+    ) {
+      pontosSegundo = pontosSegundo.concat([{
+        t: Date.now(),
+        f: estado.segundo.f,
+        l: estado.segundo.l
+      }]);
+    }
   }
 
-  const projection = normalizedProjection(first);
-  const x = i => pad.l + (samples.length <= 1 ? cw : i / (samples.length - 1) * cw);
-  const y = v => pad.t + (100 - v) / 100 * ch;
+  const y = v => margem.t + (100 - v) / 100 * altura;
 
-  let out = "";
+  const todosTempos = [
+    ...pontosPrimeiro.map(p => p.t),
+    ...pontosSegundo.map(p => p.t)
+  ].filter(Number.isFinite);
+
+  const minT = todosTempos.length ? Math.min(...todosTempos) : 0;
+  const maxT = todosTempos.length ? Math.max(...todosTempos) : 1;
+
+  const xTempo = t =>
+    margem.l +
+    (maxT === minT ? 0.5 : (t - minT) / (maxT - minT)) * largura;
+
+  let html = "";
 
   for (let v = 0; v <= 100; v += 20) {
-    out += `
-      <line x1="${pad.l}" y1="${y(v)}" x2="${W - pad.r}" y2="${y(v)}"
-        stroke="#26364a" stroke-width="1"/>
-      <text x="${pad.l - 10}" y="${y(v) + 4}" text-anchor="end"
-        fill="#9fb0c5" font-size="12">${v}%</text>`;
+    html += `
+      <line x1="${margem.l}" y1="${y(v)}"
+            x2="${W - margem.r}" y2="${y(v)}"
+            stroke="#293a50"/>
+      <text x="${margem.l - 9}" y="${y(v) + 4}"
+            text-anchor="end" fill="#9fb0c5"
+            font-size="12">${v}%</text>`;
   }
 
-  // Projeção que repete a proporção entre os dois candidatos no primeiro turno.
-  out += `
-    <line x1="${pad.l}" y1="${y(projection.f)}" x2="${W - pad.r}" y2="${y(projection.f)}"
-      stroke="#fbbf24" stroke-width="2" stroke-dasharray="7 6"/>
-    <line x1="${pad.l}" y1="${y(projection.l)}" x2="${W - pad.r}" y2="${y(projection.l)}"
-      stroke="#fbbf24" stroke-width="2" stroke-dasharray="7 6" opacity=".65"/>`;
+  html += `
+    <line x1="${margem.l}" y1="${y(projecao.f)}"
+          x2="${W - margem.r}" y2="${y(projecao.f)}"
+          stroke="#fbbf24" stroke-width="2" stroke-dasharray="7 5"/>
+    <line x1="${margem.l}" y1="${y(projecao.l)}"
+          x2="${W - margem.r}" y2="${y(projecao.l)}"
+          stroke="#fbbf24" stroke-width="2" stroke-dasharray="7 5" opacity=".65"/>`;
 
-  // Linhas de referência dos percentuais finais do primeiro turno.
-  out += `
-    <line x1="${pad.l}" y1="${y(first.f)}" x2="${W - pad.r}" y2="${y(first.f)}"
-      stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="3 5" opacity=".7"/>
-    <line x1="${pad.l}" y1="${y(first.l)}" x2="${W - pad.r}" y2="${y(first.l)}"
-      stroke="#f87171" stroke-width="1.5" stroke-dasharray="3 5" opacity=".7"/>`;
-
-  function makePath(key) {
-    if (!samples.length) return "";
-
-    return samples.map((p, i) =>
-      (i ? "L" : "M") + " " +
-      x(i).toFixed(1) + " " +
-      y(p[key]).toFixed(1)
-    ).join(" ");
+  function caminho(pontos, chave) {
+    return pontos
+      .filter(p => Number.isFinite(p[chave]))
+      .map((p, i) =>
+        (i ? "L" : "M") + " " +
+        xTempo(p.t).toFixed(1) + " " +
+        y(p[chave]).toFixed(1)
+      )
+      .join(" ");
   }
 
-  if (samples.length) {
-    out += `
-      <path d="${makePath("f")}" fill="none" stroke="#60a5fa"
-        stroke-width="3" stroke-linejoin="round"/>
-      <path d="${makePath("l")}" fill="none" stroke="#f87171"
-        stroke-width="3" stroke-linejoin="round"/>`;
+  if (pontosPrimeiro.length > 1) {
+    html += `
+      <path d="${caminho(pontosPrimeiro, "f")}"
+            fill="none" stroke="#60a5fa"
+            stroke-width="3" stroke-dasharray="5 3"/>
+      <path d="${caminho(pontosPrimeiro, "l")}"
+            fill="none" stroke="#f87171"
+            stroke-width="3" stroke-dasharray="5 3"/>`;
   }
 
-  out += `
-    <text x="${pad.l}" y="${H - 15}" fill="#9fb0c5" font-size="12">
-      Amostras guardadas neste navegador: ${samples.length}
+  if (pontosSegundo.length > 1) {
+    html += `
+      <path d="${caminho(pontosSegundo, "f")}"
+            fill="none" stroke="#60a5fa" stroke-width="3"/>
+      <path d="${caminho(pontosSegundo, "l")}"
+            fill="none" stroke="#f87171" stroke-width="3"/>`;
+  }
+
+  html += `
+    <text x="${margem.l}" y="${H - 12}"
+          fill="#9fb0c5" font-size="12">
+      Histórico 1º turno: ${pontosPrimeiro.length} parciais
     </text>
-    <text x="${W - pad.r}" y="16" text-anchor="end" fill="#fbbf24" font-size="12">
-      Projeção: Flávio ${projection.f.toFixed(2)}% · Lula ${projection.l.toFixed(2)}%
+    <text x="${W - margem.r}" y="17"
+          text-anchor="end" fill="#fbbf24" font-size="12">
+      Projeção: Flávio ${projecao.f.toFixed(2)}% · Lula ${projecao.l.toFixed(2)}%
     </text>`;
 
-  svg.innerHTML = out;
+  svg.innerHTML = html;
 
   $("chartStatus").textContent =
-    samples.length > 1 ? "Curva do 2º turno ativa" : "Aguardando novas amostras";
+    pontosPrimeiro.length > 1
+      ? "Histórico disponível"
+      : pontosSegundo.length > 1
+        ? "2º turno registrado"
+        : "Aguardando dados";
 
-  $("chartNote").textContent =
-    "As curvas coloridas mostram consultas do segundo turno feitas neste navegador. " +
-    "As linhas tracejadas são referências do primeiro turno e projeção proporcional. " +
-    "A curva histórica completa do primeiro turno ainda não está integrada.";
+  $("chartInfo").textContent =
+    "Parciais históricas encontradas: " + pontosPrimeiro.length +
+    ". Amostras locais do segundo turno: " + pontosSegundo.length +
+    ". Linhas amarelas: projeção proporcional ao primeiro turno." +
+    (primeiro.provisoria
+      ? " A referência do primeiro turno é provisória."
+      : "");
 }
 
-async function update() {
-  $("s1").textContent = "Consultando";
-  $("s2").textContent = "Consultando";
+function atualizarPainel() {
+  const primeiro = referenciaPrimeiroTurno();
 
-  const results = await Promise.allSettled([
-    fetchJSON(URLS.primeiro),
-    fetchJSON(URLS.segundo)
+  $("f1").textContent = percentual(primeiro.f);
+  $("l1").textContent = percentual(primeiro.l);
+
+  $("status1").textContent =
+    primeiro.provisoria ? "Referência provisória" : "Dados consultados";
+
+  $("info1").textContent = primeiro.provisoria
+    ? "Não foi possível obter os percentuais pela API. Valores provisórios."
+    : "Fonte: Placar do Voto. Atualização da fonte: " +
+      formatarData(lerDataFonte(estado.primeiro?.dados));
+
+  if (estado.segundo) {
+    $("f2").textContent = percentual(estado.segundo.f);
+    $("l2").textContent = percentual(estado.segundo.l);
+
+    $("status2").textContent = "Consulta concluída";
+
+    $("info2").textContent =
+      "Seções apuradas: " + inteiro(estado.segundo.secoes) +
+      ". Fonte atualizada em: " +
+      formatarData(lerDataFonte(estado.segundo.dados));
+  } else {
+    $("f2").textContent = "—";
+    $("l2").textContent = "—";
+    $("status2").textContent = "Indisponível";
+    $("info2").textContent =
+      "A fonte não retornou um resultado reconhecível.";
+  }
+
+  desenharGrafico();
+}
+
+async function atualizar() {
+  $("sourceInfo").textContent = "Consultando a API pública…";
+
+  const resultados = await Promise.allSettled([
+    consultar(ENDPOINTS.primeiro),
+    consultar(ENDPOINTS.segundo),
+    consultar(ENDPOINTS.historico)
   ]);
 
-  if (results[0].status === "fulfilled") {
-    state.first = getTotals(results[0].value);
-    $("s1").textContent = "Consultado";
-  } else {
-    $("s1").textContent = "Indisponível";
-    $("meta1").textContent =
-      "Não foi possível consultar o arquivo do primeiro turno.";
+  if (resultados[0].status === "fulfilled") {
+    const dados = resultados[0].value;
+    const lido = lerResultado(dados);
+
+    if (Number.isFinite(lido.f) && Number.isFinite(lido.l)) {
+      estado.primeiro = {
+        ...lido,
+        dados
+      };
+    }
   }
 
-  if (results[1].status === "fulfilled") {
-    state.second = getTotals(results[1].value);
-    saveSample();
-    $("s2").textContent = "Consultado";
-  } else {
-    $("s2").textContent = "Indisponível";
-    $("meta2").textContent =
-      "Não foi possível consultar o arquivo do segundo turno.";
+  if (resultados[1].status === "fulfilled") {
+    const dados = resultados[1].value;
+    const lido = lerResultado(dados);
+
+    if (Number.isFinite(lido.f) && Number.isFinite(lido.l)) {
+      estado.segundo = {
+        ...lido,
+        dados
+      };
+
+      guardarAmostra(estado.segundo);
+    }
   }
 
-  render();
+  if (resultados[2].status === "fulfilled") {
+    const dados = resultados[2].value;
+    const pontos = extrairPontosHistoricos(dados);
 
-  $("sourceStatus").textContent =
-    "Última tentativa: " + new Date().toLocaleTimeString("pt-BR");
+    if (pontos.length) {
+      estado.historico = pontos;
+      $("sourceInfo").textContent =
+        "Histórico recebido da API: " + pontos.length + " parciais.";
+    } else {
+      $("sourceInfo").textContent =
+        "A API respondeu, mas o formato do histórico precisa ser ajustado.";
+    }
+  } else {
+    $("sourceInfo").textContent =
+      "Não foi possível carregar o histórico. Código: " +
+      (resultados[2].reason?.message || "erro de rede");
+  }
+
+  if (
+    resultados[0].status === "rejected" &&
+    resultados[1].status === "rejected"
+  ) {
+    $("sourceInfo").textContent +=
+      " A consulta de resultados também falhou. Verifique a conexão ou CORS.";
+  }
+
+  $("updated").textContent =
+    "Última tentativa neste navegador: " +
+    new Date().toLocaleString("pt-BR");
+
+  atualizarPainel();
 }
 
-loadSaved();
-
-$("refresh").addEventListener("click", update);
-
-update();
-
-setInterval(update, 60000);
+carregarAmostras();
+atualizar();
+setInterval(atualizar, 60000);
 </script>
+
 </body>
 </html>
