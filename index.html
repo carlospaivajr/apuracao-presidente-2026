@@ -2,144 +2,201 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1120">
 <title>Apuração Presidencial 2026</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0b1120;color:#f1f5f9;
-font-family:Arial,sans-serif}
-header{padding:24px 16px;background:#101a2b;
-border-bottom:1px solid #334155}
+body{
+ margin:0;background:#0b1120;color:#f1f5f9;
+ font-family:Arial,sans-serif
+}
+header{background:#101a2b;border-bottom:1px solid #334155}
 main{max-width:950px;margin:auto;padding:16px}
-h1{font-size:27px;margin:10px 0}
-h2{font-size:20px;margin-top:28px}
-.muted{color:#a8b5c8;line-height:1.5}
-.card{background:#151f32;border:1px solid #334155;
-border-radius:12px;padding:16px;margin:14px 0}
+header main{padding-top:25px;padding-bottom:25px}
+.tag{color:#34d399;font-size:12px;font-weight:bold;letter-spacing:2px}
+h1{font-size:27px;margin:14px 0}
+h2{font-size:21px;margin-top:30px}
+.muted{color:#a8b5c8;line-height:1.6}
+.card{
+ background:#151f32;border:1px solid #334155;
+ border-radius:15px;padding:16px;margin:14px 0;
+ overflow:hidden
+}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.big{font-size:28px;font-weight:bold;margin-top:10px}
-button{background:#2563eb;color:white;border:0;
-padding:12px 16px;border-radius:8px;font-weight:bold}
-canvas{width:100%;height:300px;display:block}
-table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{text-align:left;padding:10px 5px;
-border-bottom:1px solid #334155}
+.big{font-size:27px;font-weight:bold;margin-top:10px}
+button{
+ background:#2563eb;color:white;border:0;padding:13px 17px;
+ border-radius:9px;font-weight:bold;font-size:14px;cursor:pointer
+}
+button:disabled{opacity:.6}
+canvas{width:100%;height:360px;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:13px;margin:12px 0;font-size:12px;color:#cbd5e1}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:450px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid #334155}
 th{color:#a8b5c8}
 .wrap{overflow-x:auto}
-.tag{color:#34d399;font-size:12px;font-weight:bold}
-.bar{height:9px;background:#334155;border-radius:5px;
-overflow:hidden;margin:8px 0}
-.fill{height:100%;background:#34d399;width:0}
-footer{font-size:12px;color:#a8b5c8;line-height:1.6;
-margin:25px 0}
+.bar{height:9px;background:#334155;border-radius:5px;overflow:hidden;margin:8px 0 16px}
+.fill{height:100%;background:#34d399}
+.notice{line-height:1.6}
+footer{font-size:12px;color:#a8b5c8;line-height:1.7;margin:30px 0}
 @media(max-width:450px){
-.big{font-size:23px}
-.card{padding:12px}
+ main{padding:12px}
+ h1{font-size:24px}
+ h2{font-size:19px}
+ .big{font-size:22px}
+ .card{padding:12px}
+ canvas{height:330px}
 }
 </style>
 </head>
+
 <body>
+
 <header>
- <main>
-  <div class="tag">PAINEL INDEPENDENTE</div>
-  <h1>Apuração Presidencial 2026</h1>
-  <div class="muted">Brasil · Segundo turno · 25/10/2026</div>
- </main>
+<main>
+ <div class="tag">PAINEL INDEPENDENTE</div>
+ <h1>Apuração Presidencial 2026</h1>
+ <div class="muted">Brasil inteiro · Segundo turno · 25/10/2026</div>
+</main>
 </header>
 
 <main>
- <div class="card" id="status">
-  Conectando aos dados oficiais do TSE...
- </div>
 
- <div class="grid">
-  <div class="card">
-   <div class="muted">Urnas apuradas</div>
-   <div class="big" id="urnas">—</div>
-  </div>
-  <div class="card">
-   <div class="muted">Última consulta</div>
-   <div class="big" id="hora" style="font-size:20px">—</div>
-  </div>
- </div>
+<div class="card notice" id="status">
+Conectando aos dados oficiais do TSE...
+</div>
 
- <h2>Resultado do segundo turno</h2>
- <div class="card" id="resultado">Aguardando dados.</div>
-
- <h2>Comparação entre os turnos</h2>
+<div class="grid">
  <div class="card">
-  <canvas id="grafico"></canvas>
-  <div class="muted" style="font-size:12px">
-   Azul: votação original do primeiro turno.
-   Verde: votação real do segundo turno.
-   Amarelo: projeção baseada na proporção dos dois finalistas
-   no primeiro turno.
-  </div>
+  <div class="muted">Urnas apuradas</div>
+  <div class="big" id="urnas">—</div>
+  <div class="muted">Percentual informado pelo TSE</div>
  </div>
 
- <h2>Projeção de referência</h2>
- <div class="card" id="projecao">
-  Aguardando os resultados oficiais dos dois turnos.
+ <div class="card">
+  <div class="muted">Última consulta</div>
+  <div class="big" id="hora" style="font-size:20px">—</div>
+  <div class="muted">Atualização a cada 60 segundos</div>
  </div>
+</div>
 
- <h2>Marcos de apuração</h2>
- <div class="card wrap">
-  <table>
-   <thead>
-    <tr>
-     <th>Urnas</th>
-     <th>Resultado A</th>
-     <th>Resultado B</th>
-     <th>Projeção A/B</th>
-    </tr>
-   </thead>
-   <tbody id="historico">
-    <tr><td colspan="4">Aguardando dados.</td></tr>
-   </tbody>
-  </table>
+<h2>Resultado do segundo turno</h2>
+<div class="card" id="resultado">Aguardando dados oficiais.</div>
+
+<h2>Evolução da votação</h2>
+
+<div class="muted">
+O gráfico acompanha os percentuais dos dois candidatos conforme
+avança a apuração. As linhas de referência mostram a proporção
+dos votos dos dois finalistas no primeiro turno.
+</div>
+
+<div class="legend">
+ <span><i class="dot" style="background:#60a5fa"></i>Flávio — referência do 1º turno</span>
+ <span><i class="dot" style="background:#fbbf24"></i>Flávio — projeção</span>
+ <span><i class="dot" style="background:#34d399"></i>Flávio — resultado real</span>
+ <span><i class="dot" style="background:#f87171"></i>Lula — resultado real</span>
+ <span><i class="dot" style="background:#c084fc"></i>Lula — referência do 1º turno</span>
+</div>
+
+<div class="card">
+ <canvas id="grafico"></canvas>
+ <div class="muted" style="font-size:12px">
+ Eixo horizontal: percentual de urnas apuradas.
+ Eixo vertical: percentual dos votos válidos.
+ A linha real só começa quando existem dados disponíveis.
  </div>
+</div>
 
- <p><button id="atualizar">Consultar agora</button></p>
+<h2>Projeção de referência</h2>
+<div class="card" id="projecao">
+Aguardando os resultados oficiais.
+</div>
 
- <footer>
-  Painel independente, sem vínculo com o TSE ou candidaturas.
-  Fonte: arquivos públicos da Justiça Eleitoral.
-  A projeção é matemática e não representa previsão oficial.
-  Os percentuais do primeiro turno são mostrados sem normalização;
-  a projeção considera apenas os votos dos dois finalistas.
- </footer>
+<h2>Projeção a cada 10% de urnas</h2>
+
+<div class="muted">
+Esta tabela mostra o resultado real observado quando cada marco
+é alcançado e a projeção fixa baseada na proporção do primeiro turno.
+</div>
+
+<div class="card wrap">
+<table>
+<thead>
+<tr>
+ <th>Urnas</th>
+ <th>Flávio real</th>
+ <th>Lula real</th>
+ <th>Projeção Flávio</th>
+ <th>Projeção Lula</th>
+</tr>
+</thead>
+<tbody id="historico">
+<tr><td colspan="5">Aguardando dados oficiais.</td></tr>
+</tbody>
+</table>
+</div>
+
+<p><button id="atualizar">Consultar agora</button></p>
+
+<footer>
+Painel independente, sem vínculo com o TSE ou qualquer candidatura.
+Fonte dos resultados: arquivos públicos do Tribunal Superior Eleitoral.
+
+A projeção é matemática, não uma previsão oficial.
+Ela considera a proporção dos votos dos dois finalistas no primeiro
+turno e não representa uma estimativa estatística do resultado final.
+
+O histórico de evolução é armazenado neste navegador. Para preservar
+o histórico entre consultas, utilize o mesmo dispositivo e navegador.
+</footer>
+
 </main>
 
 <script>
 "use strict";
 
+/*
+ ARQUIVOS PÚBLICOS DO TSE
+ Primeiro turno: eleição 6257
+ Segundo turno: eleição 6258
+*/
+
 const URLS = {
  primeiro:
  "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
+
  segundo:
  "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json"
 };
 
 const INTERVALO = 60000;
-const STORAGE = "apuracaoPresidencial2026";
+const CHAVE = "apuracaoPresidencialLinhas2026";
 const $ = id => document.getElementById(id);
 
-function numero(v) {
- if (typeof v === "number") return v;
+let ultimoDados = null;
+let consultando = false;
+
+function numero(v){
+ if(typeof v === "number") return v;
  return Number(String(v ?? "0").replace(",", ".")) || 0;
 }
 
-function candidatos(obj, lista = []) {
- if (!obj || typeof obj !== "object") return lista;
+function candidatos(obj, lista = []){
+ if(!obj || typeof obj !== "object") return lista;
 
- if (Array.isArray(obj)) {
+ if(Array.isArray(obj)){
   obj.forEach(x => candidatos(x, lista));
   return lista;
  }
 
- if (obj.pvap !== undefined &&
-     obj.n !== undefined &&
-     (obj.nmu || obj.nm)) {
+ if(obj.pvap !== undefined &&
+    obj.n !== undefined &&
+    (obj.nmu || obj.nm)){
   lista.push(obj);
  }
 
@@ -147,141 +204,287 @@ function candidatos(obj, lista = []) {
  return lista;
 }
 
-function localizar(dados, numeroCandidato) {
+function localizar(dados, numeroCandidato){
  return candidatos(dados).find(
   c => String(c.n) === String(numeroCandidato)
  );
 }
 
-function percentual(c) {
- return c ? numero(c.pvap) : 0;
-}
-
-function votos(c) {
+function votos(c){
  return c ? numero(c.vap) : 0;
 }
 
-function nome(c) {
+function percentual(c){
+ return c ? numero(c.pvap) : 0;
+}
+
+function nome(c){
  return c ? (c.nmu || c.nm) : "Candidato não identificado";
 }
 
-function buscarEstrutura(dados) {
- const cargo = dados?.carg?.find(c => String(c.cd) === "1");
- if (!cargo) throw Error("Cargo presidencial não encontrado.");
- return cargo;
-}
-
-async function baixar(url) {
- const r = await fetch(url, {
-  cache: "no-store",
-  headers: {"Accept":"application/json"}
- });
- if (!r.ok) throw Error("O TSE respondeu HTTP " + r.status);
- return r.json();
-}
-
-function formatar(v) {
- return v.toLocaleString("pt-BR", {
+function formatar(v){
+ return Number(v).toLocaleString("pt-BR",{
   minimumFractionDigits:2,
   maximumFractionDigits:2
  }) + "%";
 }
 
-function registrarMarco(p, a, b, projA, projB) {
- let dados = {};
- try {
-  dados = JSON.parse(localStorage.getItem(STORAGE) || "{}");
- } catch(e) {}
+function buscarEstrutura(dados){
+ const cargo = dados?.carg?.find(c => String(c.cd) === "1");
+ if(!cargo) throw Error("Cargo presidencial não encontrado.");
+ return cargo;
+}
 
- if (!dados.marcos) dados.marcos = {};
+async function baixar(url){
+ const separador = url.includes("?") ? "&" : "?";
+ const resposta = await fetch(url + separador + "_=" + Date.now(), {
+  cache:"no-store",
+  headers:{"Accept":"application/json"}
+ });
 
- // Registra o resultado observado quando cada marco é atingido.
- for (let marco = 10; marco <= 100; marco += 10) {
-  if (p >= marco && !dados.marcos[marco]) {
+ if(!resposta.ok){
+  throw Error("O TSE respondeu HTTP " + resposta.status);
+ }
+
+ return resposta.json();
+}
+
+function carregarHistorico(){
+ try{
+  const dados = JSON.parse(localStorage.getItem(CHAVE) || "{}");
+
+  if(!Array.isArray(dados.pontos)) dados.pontos = [];
+  if(!dados.marcos || typeof dados.marcos !== "object"){
+   dados.marcos = {};
+  }
+
+  return dados;
+ }catch(e){
+  return {pontos:[],marcos:{}};
+ }
+}
+
+function salvarHistorico(dados){
+ try{
+  localStorage.setItem(CHAVE,JSON.stringify(dados));
+ }catch(e){
+  console.warn("Não foi possível salvar o histórico.",e);
+ }
+}
+
+function registrarPonto(p,a,b){
+ if(!Number.isFinite(p) || p <= 0 || p > 100) return;
+
+ const dados = carregarHistorico();
+ const ultimo = dados.pontos[dados.pontos.length - 1];
+
+ /*
+ Só acrescenta um ponto quando o percentual de urnas
+ ou os resultados observados mudam.
+ */
+
+ if(ultimo &&
+    ultimo.p === p &&
+    ultimo.a === a &&
+    ultimo.b === b){
+  return;
+ }
+
+ dados.pontos.push({
+  p:p,
+  a:a,
+  b:b,
+  hora:new Date().toISOString()
+ });
+
+ if(dados.pontos.length > 1500){
+  dados.pontos = dados.pontos.slice(-1500);
+ }
+
+ for(let marco = 10; marco <= 100; marco += 10){
+  if(p >= marco && !dados.marcos[marco]){
    dados.marcos[marco] = {
-    a, b, projA, projB,
-    horario: new Date().toISOString()
+    p:p,
+    a:a,
+    b:b,
+    hora:new Date().toISOString()
    };
   }
  }
 
- dados.ultimo = {p, a, b, projA, projB};
- localStorage.setItem(STORAGE, JSON.stringify(dados));
+ salvarHistorico(dados);
+}
 
+function atualizarTabela(){
+ const dados = carregarHistorico();
  const corpo = $("historico");
  corpo.replaceChildren();
 
- const marcos = Object.entries(dados.marcos || {})
-  .sort((x,y) => Number(x[0])-Number(y[0]));
+ const marcos = Object.keys(dados.marcos)
+  .map(Number)
+  .sort((a,b) => a-b);
 
- if (!marcos.length) {
+ if(!marcos.length){
   corpo.innerHTML =
-   '<tr><td colspan="4">Aguardando 10% de apuração.</td></tr>';
+   '<tr><td colspan="5">Aguardando 10% de apuração.</td></tr>';
   return;
  }
 
- marcos.forEach(([marco,d]) => {
+ marcos.forEach(marco => {
+  const d = dados.marcos[marco];
   const tr = document.createElement("tr");
+
   [
    marco + "%",
    formatar(d.a),
    formatar(d.b),
-   formatar(d.projA) + " / " + formatar(d.projB)
-  ].forEach(v => {
+   ultimoDados ? formatar(ultimoDados.projA) : "—",
+   ultimoDados ? formatar(ultimoDados.projB) : "—"
+  ].forEach(valor => {
    const td = document.createElement("td");
-   td.textContent = v;
+   td.textContent = valor;
    tr.appendChild(td);
   });
+
   corpo.appendChild(tr);
  });
 }
 
-function desenhar(d) {
+function desenhar(d){
  const canvas = $("grafico");
  const ctx = canvas.getContext("2d");
- const w = canvas.width = canvas.clientWidth * devicePixelRatio;
- const h = canvas.height = 300 * devicePixelRatio;
 
- ctx.scale(devicePixelRatio, devicePixelRatio);
- const W = canvas.clientWidth;
- const H = 300;
+ const W = Math.max(280,canvas.clientWidth);
+ const H = window.innerWidth <= 450 ? 330 : 360;
+ const escala = window.devicePixelRatio || 1;
 
+ canvas.width = W * escala;
+ canvas.height = H * escala;
+ canvas.style.height = H + "px";
+
+ ctx.setTransform(escala,0,0,escala,0,0);
  ctx.clearRect(0,0,W,H);
- ctx.font = "12px Arial";
 
- const itens = [
-  {n:"1º turno",a:d.primeiroA,b:d.primeiroB},
-  {n:"2º turno",a:d.realA,b:d.realB},
-  {n:"Projeção",a:d.projA,b:d.projB}
- ];
+ const margem = {esq:43,dir:12,topo:25,baixo:48};
+ const largura = W - margem.esq - margem.dir;
+ const altura = H - margem.topo - margem.baixo;
 
- const cores = ["#60a5fa","#34d399","#fbbf24"];
- const margem = 34;
- const largura = (W - margem*2) / 3;
+ const historico = carregarHistorico();
 
- itens.forEach((item,i) => {
-  const x = margem + i*largura;
+ const pontos = historico.pontos
+  .filter(p =>
+   Number.isFinite(p.p) &&
+   Number.isFinite(p.a) &&
+   Number.isFinite(p.b)
+  )
+  .slice()
+  .sort((a,b) => a.p-b.p);
+
+ /*
+ A escala vertical é fixa de 0 a 100%.
+ Isso permite comparar diretamente os percentuais.
+ */
+
+ const X = p => margem.esq + largura * p / 100;
+ const Y = v => margem.topo + altura * (100-v) / 100;
+
+ ctx.font = "11px Arial";
+ ctx.textAlign = "right";
+ ctx.textBaseline = "middle";
+
+ for(let v=0;v<=100;v+=10){
+  ctx.beginPath();
+  ctx.strokeStyle = "#334155";
+  ctx.lineWidth = 1;
+  ctx.moveTo(margem.esq,Y(v));
+  ctx.lineTo(W-margem.dir,Y(v));
+  ctx.stroke();
+
   ctx.fillStyle = "#a8b5c8";
-  ctx.fillText(item.n,x,H-8);
+  ctx.fillText(v+"%",margem.esq-6,Y(v));
+ }
+
+ ctx.textAlign = "center";
+ ctx.textBaseline = "alphabetic";
+
+ for(let p=0;p<=100;p+=20){
+  ctx.fillStyle = "#a8b5c8";
+  ctx.fillText(p+"%",X(p),H-25);
+ }
+
+ ctx.fillStyle = "#cbd5e1";
+ ctx.fillText("Urnas apuradas",margem.esq+largura/2,H-6);
+
+ function linha(lista,cor,tracejada=false){
+  if(!lista.length) return;
+
+  ctx.beginPath();
+  ctx.strokeStyle = cor;
+  ctx.lineWidth = 2.5;
+  ctx.setLineDash(tracejada ? [6,5] : []);
+
+  lista.forEach((p,i)=>{
+   if(i===0) ctx.moveTo(X(p.x),Y(p.y));
+   else ctx.lineTo(X(p.x),Y(p.y));
+  });
+
+  ctx.stroke();
+  ctx.setLineDash([]);
+ }
+
+ // Referências fixas do primeiro turno.
+ linha([
+  {x:0,y:d.primeiroA},
+  {x:100,y:d.primeiroA}
+ ],"#60a5fa",true);
+
+ linha([
+  {x:0,y:d.primeiroB},
+  {x:100,y:d.primeiroB}
+ ],"#c084fc",true);
+
+ // Projeção fixa: repete a proporção do primeiro turno.
+ linha([
+  {x:0,y:d.projA},
+  {x:100,y:d.projA}
+ ],"#fbbf24");
+
+ // Resultados reais do segundo turno.
+ linha(pontos.map(p=>({x:p.p,y:p.a})),"#34d399");
+ linha(pontos.map(p=>({x:p.p,y:p.b})),"#f87171");
+
+ // Destaca a última observação.
+ if(pontos.length){
+  const ultimo = pontos[pontos.length-1];
 
   [
-   {v:item.a,c:cores[i],dx:0},
-   {v:item.b,c:"#64748b",dx:largura/3}
-  ].forEach((barra,j) => {
-   const bh = Math.max(0,barra.v/100*(H-65));
-   const bx = x + j*largura/3;
-   ctx.fillStyle = barra.c;
-   ctx.fillRect(bx,H-32-bh,Math.max(9,largura/4),bh);
-   ctx.fillStyle = "#f1f5f9";
-   ctx.fillText(formatar(barra.v),bx,H-38-bh);
+   {v:ultimo.a,c:"#34d399"},
+   {v:ultimo.b,c:"#f87171"}
+  ].forEach(p=>{
+   ctx.beginPath();
+   ctx.fillStyle = p.c;
+   ctx.arc(X(ultimo.p),Y(p.v),4,0,Math.PI*2);
+   ctx.fill();
   });
- });
+ }
+
+ if(!pontos.length){
+  ctx.fillStyle = "#a8b5c8";
+  ctx.textAlign = "center";
+  ctx.fillText(
+   "Aguardando resultados do segundo turno",
+   margem.esq+largura/2,
+   margem.topo+altura/2
+  );
+ }
 }
 
-async function atualizar() {
+async function atualizar(){
+ if(consultando) return;
+ consultando = true;
  $("atualizar").disabled = true;
 
- try {
+ try{
   $("status").textContent = "Consultando os arquivos oficiais do TSE...";
 
   const [j1,j2] = await Promise.all([
@@ -292,26 +495,30 @@ async function atualizar() {
   const c1 = buscarEstrutura(j1);
   const c2 = buscarEstrutura(j2);
 
+  // 22 = Flávio Bolsonaro; 13 = Lula.
   const a1 = localizar(c1,22);
   const b1 = localizar(c1,13);
   const a2 = localizar(c2,22);
   const b2 = localizar(c2,13);
 
-  if (!a1 || !b1 || !a2 || !b2) {
-   throw Error("Não foi possível identificar os dois finalistas nos arquivos.");
+  if(!a1 || !b1 || !a2 || !b2){
+   throw Error("Não foi possível identificar os candidatos nos arquivos.");
   }
 
   const total1 = votos(a1) + votos(b1);
-  const total2 = votos(a2) + votos(b2);
 
-  if (total1 <= 0) {
-   throw Error("Os votos do primeiro turno ainda não estão disponíveis.");
+  if(total1 <= 0){
+   throw Error("Os votos do primeiro turno não estão disponíveis.");
   }
 
-  const primeiroA = 100*votos(a1)/total1;
-  const primeiroB = 100*votos(b1)/total1;
+  /*
+   Normaliza a proporção do primeiro turno considerando
+   apenas os votos dos dois candidatos que chegaram ao segundo.
+  */
 
-  // Projeção fixa: proporção dos votos dos dois finalistas no primeiro turno.
+  const primeiroA = 100 * votos(a1) / total1;
+  const primeiroB = 100 * votos(b1) / total1;
+
   const projA = primeiroA;
   const projB = primeiroB;
 
@@ -320,6 +527,13 @@ async function atualizar() {
 
   const sec = j2.s || {};
   const p = numero(sec.pst);
+
+  ultimoDados = {
+   projA:projA,
+   projB:projB,
+   primeiroA:primeiroA,
+   primeiroB:primeiroB
+  };
 
   $("urnas").textContent = formatar(p);
   $("hora").textContent = new Date().toLocaleTimeString("pt-BR");
@@ -340,29 +554,40 @@ async function atualizar() {
   $("projecao").textContent =
    nome(a1) + ": " + formatar(projA) + " · " +
    nome(b1) + ": " + formatar(projB) +
-   ". Cenário fixo baseado nos votos dos dois finalistas no primeiro turno.";
+   ". Projeção fixa baseada na proporção dos votos dos dois finalistas no primeiro turno.";
 
-  desenhar({primeiroA:percentual(a1),primeiroB:percentual(b1),
-   realA,realB,projA,projB});
+  registrarPonto(p,realA,realB);
+  atualizarTabela();
+  desenhar(ultimoDados);
 
-  registrarMarco(p,realA,realB,projA,projB);
-
- } catch(e) {
+ }catch(e){
   $("status").textContent =
-   "Não foi possível obter ou interpretar os dados do TSE: " +
-   e.message +
-   ". Se o acesso direto estiver bloqueado pelo navegador, será necessário configurar um intermediário.";
+   "Não foi possível atualizar os dados oficiais: " + e.message +
+   ". Tente novamente. Se o navegador bloquear o acesso direto, " +
+   "será necessário configurar uma fonte intermediária.";
 
   console.error(e);
- } finally {
+
+  // Preserva o gráfico e o histórico já disponíveis.
+  if(ultimoDados) desenhar(ultimoDados);
+
+ }finally{
+  consultando = false;
   $("atualizar").disabled = false;
  }
 }
 
-$("atualizar").addEventListener("click", atualizar);
+$("atualizar").addEventListener("click",atualizar);
+
+window.addEventListener("resize",()=>{
+ if(ultimoDados) desenhar(ultimoDados);
+});
+
 atualizar();
-setInterval(atualizar, INTERVALO);
-window.addEventListener("resize", atualizar);
+atualizarTabela();
+
+setInterval(atualizar,INTERVALO);
 </script>
+
 </body>
 </html>
