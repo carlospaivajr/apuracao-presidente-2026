@@ -1,300 +1,368 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Apuração Presidencial 2026</title>
 <style>
-:root {
-  color-scheme: dark;
-  --bg: #0b1120;
-  --card: #151f32;
-  --text: #f1f5f9;
-  --muted: #a8b5c8;
-  --blue: #60a5fa;
-  --green: #34d399;
-  --orange: #fbbf24;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-}
-header {
-  padding: 26px 18px;
-  background: #101a2b;
-  border-bottom: 1px solid #29364b;
-}
-.container {
-  width: min(100% - 28px, 1000px);
-  margin: auto;
-}
-.kicker {
-  color: var(--green);
-  font-size: 12px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-h1 { font-size: clamp(24px, 5vw, 38px); margin: 12px 0; }
-.subtitle { color: var(--muted); line-height: 1.5; }
-.badge {
-  display: inline-block;
-  padding: 7px 10px;
-  border-radius: 6px;
-  background: #26344a;
-  color: #dbeafe;
-  font-size: 12px;
-  margin-top: 8px;
-}
-main { padding: 20px 0 40px; }
-.notice {
-  padding: 14px;
-  border: 1px solid #46556d;
-  background: #18253a;
-  border-radius: 10px;
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-.cards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 16px 0;
-}
-.card {
-  background: var(--card);
-  padding: 16px;
-  border: 1px solid #29364b;
-  border-radius: 12px;
-  min-width: 0;
-}
-.label { color: var(--muted); font-size: 13px; }
-.big { font-size: clamp(24px, 5vw, 34px); font-weight: bold; margin-top: 10px; }
-.small { color: var(--muted); font-size: 12px; margin-top: 7px; line-height: 1.5; }
-h2 { font-size: 20px; margin-top: 26px; }
-canvas {
-  display: block;
-  width: 100%;
-  height: 320px;
-  background: var(--card);
-  border: 1px solid #29364b;
-  border-radius: 12px;
-}
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin: 12px 0;
-  color: var(--muted);
-  font-size: 12px;
-}
-.dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 5px;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-th, td {
-  text-align: left;
-  padding: 11px 8px;
-  border-bottom: 1px solid #29364b;
-}
-th { color: var(--muted); }
-.table-wrap { overflow-x: auto; }
-button {
-  background: #2563eb;
-  color: white;
-  border: 0;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-}
-button:disabled { opacity: .6; }
-footer {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.6;
-  padding: 20px 0;
-}
-@media(max-width:520px) {
-  .cards { grid-template-columns: 1fr 1fr; }
-  .card { padding: 12px; }
-  canvas { height: 270px; }
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#f1f5f9;
+font-family:Arial,sans-serif}
+header{padding:24px 16px;background:#101a2b;
+border-bottom:1px solid #334155}
+main{max-width:950px;margin:auto;padding:16px}
+h1{font-size:27px;margin:10px 0}
+h2{font-size:20px;margin-top:28px}
+.muted{color:#a8b5c8;line-height:1.5}
+.card{background:#151f32;border:1px solid #334155;
+border-radius:12px;padding:16px;margin:14px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.big{font-size:28px;font-weight:bold;margin-top:10px}
+button{background:#2563eb;color:white;border:0;
+padding:12px 16px;border-radius:8px;font-weight:bold}
+canvas{width:100%;height:300px;display:block}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{text-align:left;padding:10px 5px;
+border-bottom:1px solid #334155}
+th{color:#a8b5c8}
+.wrap{overflow-x:auto}
+.tag{color:#34d399;font-size:12px;font-weight:bold}
+.bar{height:9px;background:#334155;border-radius:5px;
+overflow:hidden;margin:8px 0}
+.fill{height:100%;background:#34d399;width:0}
+footer{font-size:12px;color:#a8b5c8;line-height:1.6;
+margin:25px 0}
+@media(max-width:450px){
+.big{font-size:23px}
+.card{padding:12px}
 }
 </style>
 </head>
 <body>
 <header>
-  <div class="container">
-    <div class="kicker">PAINEL INDEPENDENTE</div>
-    <h1>Apuração Presidencial 2026</h1>
-    <div class="subtitle">
-      Brasil · Segundo turno · 25 de outubro de 2026
-    </div>
-    <span class="badge">Dados oficiais do TSE quando disponíveis</span>
-  </div>
-</header><main class="container">
-  <div class="notice" id="status" role="status">
-    Preparando consulta aos dados eleitorais...
-  </div>  <div class="cards">
-    <div class="card">
-      <div class="label">Urnas apuradas</div>
-      <div class="big" id="urnas">—</div>
-      <div class="small">Percentual informado pelo TSE</div>
-    </div>
-    <div class="card">
-      <div class="label">Última consulta</div>
-      <div class="big" style="font-size:20px" id="hora">—</div>
-      <div class="small">Atualização automática a cada 60 segundos</div>
-    </div>
-  </div>  <h2>Resultado do segundo turno</h2>
+ <main>
+  <div class="tag">PAINEL INDEPENDENTE</div>
+  <h1>Apuração Presidencial 2026</h1>
+  <div class="muted">Brasil · Segundo turno · 25/10/2026</div>
+ </main>
+</header>
+
+<main>
+ <div class="card" id="status">
+  Conectando aos dados oficiais do TSE...
+ </div>
+
+ <div class="grid">
   <div class="card">
-    <div id="resultado">Aguardando dados oficiais.</div>
-  </div>  <h2>Comparação da votação</h2>
-  <div class="legend">
-    <span><i class="dot" style="background:#60a5fa"></i>Referência do primeiro turno</span>
-    <span><i class="dot" style="background:#34d399"></i>Segundo turno real</span>
-    <span><i class="dot" style="background:#fbbf24"></i>Projeção pelo primeiro turno</span>
+   <div class="muted">Urnas apuradas</div>
+   <div class="big" id="urnas">—</div>
   </div>
-  <canvas id="grafico" width="900" height="360"
-          aria-label="Gráfico da evolução dos resultados eleitorais"></canvas>
-  <div class="small">
-    A referência do primeiro turno é normalizada considerando apenas os dois
-    candidatos que disputam o segundo turno. A projeção é um cenário matemático,
-    não uma previsão oficial.
-  </div>  <h2>Projeções a cada 10%</h2>
-  <div class="card table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Urnas</th>
-          <th>Candidato A</th>
-          <th>Candidato B</th>
-          <th>Situação</th>
-        </tr>
-      </thead>
-      <tbody id="historico">
-        <tr><td colspan="4">Aguardando apuração.</td></tr>
-      </tbody>
-    </table>
-  </div>  <p style="margin-top:20px">
-    <button id="atualizar">Consultar agora</button>
-  </p>  <footer>
-    Projeto independente, sem vínculo com o TSE ou qualquer candidatura.
-    Os resultados oficiais devem ser conferidos no portal da Justiça Eleitoral.
-    A página não produz resultados eleitorais próprios. Se a consulta falhar,
-    nenhum dado será apresentado como oficial.
-  </footer>
-</main><script>
+  <div class="card">
+   <div class="muted">Última consulta</div>
+   <div class="big" id="hora" style="font-size:20px">—</div>
+  </div>
+ </div>
+
+ <h2>Resultado do segundo turno</h2>
+ <div class="card" id="resultado">Aguardando dados.</div>
+
+ <h2>Comparação entre os turnos</h2>
+ <div class="card">
+  <canvas id="grafico"></canvas>
+  <div class="muted" style="font-size:12px">
+   Azul: votação original do primeiro turno.
+   Verde: votação real do segundo turno.
+   Amarelo: projeção baseada na proporção dos dois finalistas
+   no primeiro turno.
+  </div>
+ </div>
+
+ <h2>Projeção de referência</h2>
+ <div class="card" id="projecao">
+  Aguardando os resultados oficiais dos dois turnos.
+ </div>
+
+ <h2>Marcos de apuração</h2>
+ <div class="card wrap">
+  <table>
+   <thead>
+    <tr>
+     <th>Urnas</th>
+     <th>Resultado A</th>
+     <th>Resultado B</th>
+     <th>Projeção A/B</th>
+    </tr>
+   </thead>
+   <tbody id="historico">
+    <tr><td colspan="4">Aguardando dados.</td></tr>
+   </tbody>
+  </table>
+ </div>
+
+ <p><button id="atualizar">Consultar agora</button></p>
+
+ <footer>
+  Painel independente, sem vínculo com o TSE ou candidaturas.
+  Fonte: arquivos públicos da Justiça Eleitoral.
+  A projeção é matemática e não representa previsão oficial.
+  Os percentuais do primeiro turno são mostrados sem normalização;
+  a projeção considera apenas os votos dos dois finalistas.
+ </footer>
+</main>
+
+<script>
 "use strict";
 
-/*
- * A estrutura da página está pronta. Os endereços dos arquivos de resultados
- * precisam ser confirmados na publicação oficial do TSE para a eleição de 2026.
- * Não atribua códigos eleitorais ou resultados sem confirmação oficial.
- */
+const URLS = {
+ primeiro:
+ "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
+ segundo:
+ "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json"
+};
 
-const INTERVALO_MS = 60000;
-const historico = new Map();
+const INTERVALO = 60000;
+const STORAGE = "apuracaoPresidencial2026";
+const $ = id => document.getElementById(id);
 
-const statusEl = document.getElementById("status");
-const resultadoEl = document.getElementById("resultado");
-const urnasEl = document.getElementById("urnas");
-const horaEl = document.getElementById("hora");
-const historicoEl = document.getElementById("historico");
-const botao = document.getElementById("atualizar");
-
-function mensagem(texto) {
-  statusEl.textContent = texto;
+function numero(v) {
+ if (typeof v === "number") return v;
+ return Number(String(v ?? "0").replace(",", ".")) || 0;
 }
 
-function desenharGrafico() {
-  const canvas = document.getElementById("grafico");
-  const ctx = canvas.getContext("2d");
-  const w = canvas.width;
-  const h = canvas.height;
+function candidatos(obj, lista = []) {
+ if (!obj || typeof obj !== "object") return lista;
 
-  ctx.clearRect(0, 0, w, h);
-  ctx.fillStyle = "#151f32";
-  ctx.fillRect(0, 0, w, h);
+ if (Array.isArray(obj)) {
+  obj.forEach(x => candidatos(x, lista));
+  return lista;
+ }
 
+ if (obj.pvap !== undefined &&
+     obj.n !== undefined &&
+     (obj.nmu || obj.nm)) {
+  lista.push(obj);
+ }
+
+ Object.values(obj).forEach(x => candidatos(x, lista));
+ return lista;
+}
+
+function localizar(dados, numeroCandidato) {
+ return candidatos(dados).find(
+  c => String(c.n) === String(numeroCandidato)
+ );
+}
+
+function percentual(c) {
+ return c ? numero(c.pvap) : 0;
+}
+
+function votos(c) {
+ return c ? numero(c.vap) : 0;
+}
+
+function nome(c) {
+ return c ? (c.nmu || c.nm) : "Candidato não identificado";
+}
+
+function buscarEstrutura(dados) {
+ const cargo = dados?.carg?.find(c => String(c.cd) === "1");
+ if (!cargo) throw Error("Cargo presidencial não encontrado.");
+ return cargo;
+}
+
+async function baixar(url) {
+ const r = await fetch(url, {
+  cache: "no-store",
+  headers: {"Accept":"application/json"}
+ });
+ if (!r.ok) throw Error("O TSE respondeu HTTP " + r.status);
+ return r.json();
+}
+
+function formatar(v) {
+ return v.toLocaleString("pt-BR", {
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+ }) + "%";
+}
+
+function registrarMarco(p, a, b, projA, projB) {
+ let dados = {};
+ try {
+  dados = JSON.parse(localStorage.getItem(STORAGE) || "{}");
+ } catch(e) {}
+
+ if (!dados.marcos) dados.marcos = {};
+
+ // Registra o resultado observado quando cada marco é atingido.
+ for (let marco = 10; marco <= 100; marco += 10) {
+  if (p >= marco && !dados.marcos[marco]) {
+   dados.marcos[marco] = {
+    a, b, projA, projB,
+    horario: new Date().toISOString()
+   };
+  }
+ }
+
+ dados.ultimo = {p, a, b, projA, projB};
+ localStorage.setItem(STORAGE, JSON.stringify(dados));
+
+ const corpo = $("historico");
+ corpo.replaceChildren();
+
+ const marcos = Object.entries(dados.marcos || {})
+  .sort((x,y) => Number(x[0])-Number(y[0]));
+
+ if (!marcos.length) {
+  corpo.innerHTML =
+   '<tr><td colspan="4">Aguardando 10% de apuração.</td></tr>';
+  return;
+ }
+
+ marcos.forEach(([marco,d]) => {
+  const tr = document.createElement("tr");
+  [
+   marco + "%",
+   formatar(d.a),
+   formatar(d.b),
+   formatar(d.projA) + " / " + formatar(d.projB)
+  ].forEach(v => {
+   const td = document.createElement("td");
+   td.textContent = v;
+   tr.appendChild(td);
+  });
+  corpo.appendChild(tr);
+ });
+}
+
+function desenhar(d) {
+ const canvas = $("grafico");
+ const ctx = canvas.getContext("2d");
+ const w = canvas.width = canvas.clientWidth * devicePixelRatio;
+ const h = canvas.height = 300 * devicePixelRatio;
+
+ ctx.scale(devicePixelRatio, devicePixelRatio);
+ const W = canvas.clientWidth;
+ const H = 300;
+
+ ctx.clearRect(0,0,W,H);
+ ctx.font = "12px Arial";
+
+ const itens = [
+  {n:"1º turno",a:d.primeiroA,b:d.primeiroB},
+  {n:"2º turno",a:d.realA,b:d.realB},
+  {n:"Projeção",a:d.projA,b:d.projB}
+ ];
+
+ const cores = ["#60a5fa","#34d399","#fbbf24"];
+ const margem = 34;
+ const largura = (W - margem*2) / 3;
+
+ itens.forEach((item,i) => {
+  const x = margem + i*largura;
   ctx.fillStyle = "#a8b5c8";
-  ctx.font = "16px Arial";
-  ctx.fillText("O gráfico será preenchido quando os dados", 30, 145);
-  ctx.fillText("oficiais forem conectados e validados.", 30, 170);
+  ctx.fillText(item.n,x,H-8);
 
-  ctx.font = "12px Arial";
-  ctx.fillText("Não há resultados fictícios neste painel.", 30, 210);
+  [
+   {v:item.a,c:cores[i],dx:0},
+   {v:item.b,c:"#64748b",dx:largura/3}
+  ].forEach((barra,j) => {
+   const bh = Math.max(0,barra.v/100*(H-65));
+   const bx = x + j*largura/3;
+   ctx.fillStyle = barra.c;
+   ctx.fillRect(bx,H-32-bh,Math.max(9,largura/4),bh);
+   ctx.fillStyle = "#f1f5f9";
+   ctx.fillText(formatar(barra.v),bx,H-38-bh);
+  });
+ });
 }
 
-function atualizarTabela() {
-  const linhas = [...historico.entries()].sort((a, b) => a[0] - b[0]);
+async function atualizar() {
+ $("atualizar").disabled = true;
 
-  if (!linhas.length) {
-    historicoEl.innerHTML =
-      '<tr><td colspan="4">Aguardando dados oficiais.</td></tr>';
-    return;
+ try {
+  $("status").textContent = "Consultando os arquivos oficiais do TSE...";
+
+  const [j1,j2] = await Promise.all([
+   baixar(URLS.primeiro),
+   baixar(URLS.segundo)
+  ]);
+
+  const c1 = buscarEstrutura(j1);
+  const c2 = buscarEstrutura(j2);
+
+  const a1 = localizar(c1,22);
+  const b1 = localizar(c1,13);
+  const a2 = localizar(c2,22);
+  const b2 = localizar(c2,13);
+
+  if (!a1 || !b1 || !a2 || !b2) {
+   throw Error("Não foi possível identificar os dois finalistas nos arquivos.");
   }
 
-  historicoEl.replaceChildren();
+  const total1 = votos(a1) + votos(b1);
+  const total2 = votos(a2) + votos(b2);
 
-  for (const [marco, dado] of linhas) {
-    const tr = document.createElement("tr");
-    const valores = [
-      marco + "%",
-      dado.a.toFixed(2) + "%",
-      dado.b.toFixed(2) + "%",
-      dado.a > dado.b ? "A na frente" :
-        dado.b > dado.a ? "B na frente" : "Empate"
-    ];
-
-    for (const valor of valores) {
-      const td = document.createElement("td");
-      td.textContent = valor;
-      tr.appendChild(td);
-    }
-
-    historicoEl.appendChild(tr);
+  if (total1 <= 0) {
+   throw Error("Os votos do primeiro turno ainda não estão disponíveis.");
   }
+
+  const primeiroA = 100*votos(a1)/total1;
+  const primeiroB = 100*votos(b1)/total1;
+
+  // Projeção fixa: proporção dos votos dos dois finalistas no primeiro turno.
+  const projA = primeiroA;
+  const projB = primeiroB;
+
+  const realA = percentual(a2);
+  const realB = percentual(b2);
+
+  const sec = j2.s || {};
+  const p = numero(sec.pst);
+
+  $("urnas").textContent = formatar(p);
+  $("hora").textContent = new Date().toLocaleTimeString("pt-BR");
+
+  $("status").textContent =
+   "Dados recebidos dos arquivos públicos do TSE. " +
+   "Última geração do segundo turno: " +
+   (j2.dg || "data não informada") + " " + (j2.hg || "");
+
+  $("resultado").innerHTML =
+   "<b>" + nome(a2) + "</b>: " + formatar(realA) +
+   "<div class='bar'><div class='fill' style='width:" +
+   Math.max(0,Math.min(100,realA)) + "%'></div></div>" +
+   "<b>" + nome(b2) + "</b>: " + formatar(realB) +
+   "<div class='bar'><div class='fill' style='width:" +
+   Math.max(0,Math.min(100,realB)) + "%'></div></div>";
+
+  $("projecao").textContent =
+   nome(a1) + ": " + formatar(projA) + " · " +
+   nome(b1) + ": " + formatar(projB) +
+   ". Cenário fixo baseado nos votos dos dois finalistas no primeiro turno.";
+
+  desenhar({primeiroA:percentual(a1),primeiroB:percentual(b1),
+   realA,realB,projA,projB});
+
+  registrarMarco(p,realA,realB,projA,projB);
+
+ } catch(e) {
+  $("status").textContent =
+   "Não foi possível obter ou interpretar os dados do TSE: " +
+   e.message +
+   ". Se o acesso direto estiver bloqueado pelo navegador, será necessário configurar um intermediário.";
+
+  console.error(e);
+ } finally {
+  $("atualizar").disabled = false;
+ }
 }
 
-async function consultar() {
-  botao.disabled = true;
-
-  try {
-    /*
-     * Não existe uma URL validada configurada neste arquivo.
-     * A consulta será ativada depois de confirmarmos os arquivos corretos
-     * de votação presidencial do primeiro e do segundo turnos.
-     */
-    mensagem(
-      "Página publicada, mas a conexão com os arquivos de apuração do TSE " +
-      "ainda precisa ser configurada. Nenhum resultado foi inventado. " +
-      "Consulte o portal oficial do TSE enquanto isso."
-    );
-
-    horaEl.textContent = new Date().toLocaleTimeString("pt-BR");
-    desenharGrafico();
-    atualizarTabela();
-  } catch (erro) {
-    mensagem("Não foi possível consultar os dados. Tente novamente mais tarde.");
-  } finally {
-    botao.disabled = false;
-  }
-}
-
-botao.addEventListener("click", consultar);
-desenharGrafico();
-consultar();
-setInterval(consultar, INTERVALO_MS);
-</script></body>
-  </html>
+$("atualizar").addEventListener("click", atualizar);
+atualizar();
+setInterval(atualizar, INTERVALO);
+window.addEventListener("resize", atualizar);
+</script>
+</body>
+</html>
