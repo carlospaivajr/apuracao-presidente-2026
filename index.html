@@ -1,1572 +1,508 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Apuração Presidencial 2026</title>
-
-<meta name="theme-color" content="#0b1120">
-<meta name="description"
-content="Painel independente de acompanhamento da apuração presidencial de 2026, com dados públicos do TSE.">
-
 <style>
 :root {
-  --bg: #0b1120;
-  --panel: #162135;
-  --panel2: #1b2940;
-  --border: #30415c;
-  --text: #f1f5f9;
-  --muted: #a9b8cc;
+  color-scheme: dark;
+  --bg: #0b1220;
+  --panel: #121d2d;
+  --line: #26364a;
+  --text: #eef4fb;
+  --muted: #9fb0c5;
   --blue: #60a5fa;
+  --red: #f87171;
   --green: #34d399;
-  --yellow: #fbbf24;
-  --red: #fb7185;
-  --purple: #c084fc;
+  --gold: #fbbf24;
 }
-
-* {
-  box-sizing: border-box;
-}
-
+* { box-sizing: border-box; }
 body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-               "Segoe UI", sans-serif;
-  line-height: 1.5;
+  font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
-
-header {
-  background: #111c2e;
-  padding: 28px 20px;
-  border-bottom: 1px solid var(--border);
-}
-
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.brand {
-  color: var(--green);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  margin-bottom: 12px;
-}
-
-h1 {
-  margin: 0;
-  font-size: clamp(25px, 5vw, 38px);
-  line-height: 1.2;
-}
-
-.subtitle {
-  color: var(--muted);
-  margin-top: 14px;
-  font-size: 16px;
-}
-
-.badge {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 7px 12px;
-  border-radius: 8px;
-  background: #263750;
-  color: #dbeafe;
-  font-size: 13px;
-}
-
-.notice {
-  background: var(--panel2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px;
-  margin-bottom: 20px;
-  overflow-wrap: anywhere;
-}
-
-.notice strong {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.status-ok {
-  border-color: #176b54;
-}
-
-.status-error {
-  border-color: #9f3348;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-bottom: 28px;
-}
-
+main { max-width: 1100px; margin: auto; padding: 20px; }
+header { padding: 12px 0 18px; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin: 0 0 6px; }
+h2 { font-size: 1.1rem; margin: 0 0 12px; }
+.muted { color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .card {
   background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 15px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
   padding: 16px;
-  min-width: 0;
+  margin-bottom: 14px;
 }
-
-.card-label {
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.card-value {
-  font-size: 27px;
-  font-weight: 800;
-  margin-top: 5px;
-}
-
-.card-small {
-  font-size: 13px;
-  color: var(--muted);
-  overflow-wrap: anywhere;
-}
-
-section {
-  margin: 30px 0;
-}
-
-h2 {
-  font-size: 22px;
-  margin: 0 0 16px;
-}
-
-h3 {
-  font-size: 17px;
-  margin: 0 0 12px;
-}
-
-p {
-  color: var(--muted);
-}
-
-.result-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  padding: 16px;
-}
-
-.candidate {
-  margin-bottom: 18px;
-}
-
-.candidate:last-child {
-  margin-bottom: 0;
-}
-
-.candidate-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-}
-
-.candidate-name {
-  font-weight: 800;
-}
-
-.track {
-  height: 10px;
-  background: #34445d;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.fill {
-  height: 100%;
-  width: 0%;
-  transition: width 0.4s ease;
-  border-radius: 20px;
-}
-
-.flavio-fill {
-  background: var(--blue);
-}
-
-.lula-fill {
-  background: var(--green);
-}
-
-.chart-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 16px;
-  margin: 16px 0;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-}
-
-.chart-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  padding: 12px;
-  overflow: hidden;
-}
-
-#chart {
-  width: 100%;
-  display: block;
-  height: auto;
-  min-height: 250px;
-}
-
-.chart-caption {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 10px 0 0;
-}
-
-.table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--panel);
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  min-width: 620px;
-  font-size: 13px;
-}
-
-th, td {
-  text-align: left;
-  padding: 13px 12px;
-  border-bottom: 1px solid var(--border);
-  white-space: nowrap;
-}
-
-th {
-  color: var(--muted);
-  font-weight: 700;
-  background: rgba(255,255,255,0.02);
-}
-
-tr:last-child td {
-  border-bottom: none;
-}
-
-.projection-card {
-  font-size: 16px;
-  line-height: 1.7;
-}
-
-button {
-  background: #2563eb;
-  border: 0;
-  color: white;
-  font-size: 15px;
-  font-weight: 700;
-  border-radius: 10px;
-  padding: 13px 20px;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-
-.button-row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 18px;
-}
-
-#refreshStatus {
-  font-size: 12px;
-  color: var(--muted);
-}
-
-footer {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.8;
-  padding: 25px 0 40px;
-}
-
-footer a {
-  color: var(--blue);
-}
-
-.small-note {
-  font-size: 13px;
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 16px 12px;
-  }
-
-  header {
-    padding: 24px 16px;
-  }
-
-  .cards {
-    gap: 9px;
-  }
-
-  .card {
-    padding: 12px;
-  }
-
-  .card-value {
-    font-size: 23px;
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-
-  .chart-card {
-    padding: 8px;
-  }
-
-  #chart {
-    min-height: 220px;
-  }
+.score { font-size: clamp(1.5rem, 4vw, 2.3rem); font-weight: 800; }
+.row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.pill { font-size: .78rem; border-radius: 99px; padding: 4px 9px; background: #203047; color: #d9e7f7; }
+.status { font-size: .9rem; color: var(--muted); margin-top: 8px; }
+.chart-wrap { width: 100%; overflow: hidden; }
+svg { display: block; width: 100%; height: auto; min-height: 260px; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: .85rem; color: var(--muted); margin: 8px 0; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+.warning { border-left: 3px solid var(--gold); padding: 8px 12px; background: #211f19; color: #f5e8c8; font-size: .9rem; }
+.small { font-size: .82rem; color: var(--muted); }
+button { background: #203047; color: var(--text); border: 1px solid #3a506d; border-radius: 10px; padding: 10px 13px; font: inherit; }
+footer { padding: 8px 0 24px; }
+@media (max-width: 650px) {
+  main { padding: 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 13px; }
 }
 </style>
 </head>
-
 <body>
+<main>
 
 <header>
-  <div class="container" style="padding-top:0;padding-bottom:0">
-    <div class="brand">PAINEL INDEPENDENTE</div>
-
-    <h1>Apuração Presidencial 2026</h1>
-
-    <div class="subtitle">
-      Brasil inteiro · Segundo turno · 25/10/2026
-    </div>
-
-    <div class="badge">
-      Dados públicos da Justiça Eleitoral
-    </div>
-  </div>
+  <div class="pill">BRASIL · ELEIÇÃO PRESIDENCIAL 2026</div>
+  <h1>Apuração presidencial</h1>
+  <div class="muted">Resultados, evolução da apuração e projeção baseada no 1º turno.</div>
 </header>
 
-<main class="container">
-
-  <div id="notice" class="notice">
-    <strong id="noticeTitle">Conectando aos dados oficiais...</strong>
-    <span id="noticeText">
-      O painel está consultando os arquivos públicos do TSE.
-    </span>
+<section class="grid">
+  <div class="card">
+    <div class="row">
+      <h2>1º turno · referência</h2>
+      <span class="pill" id="s1">Carregando…</span>
+    </div>
+    <div class="row">
+      <div>
+        <div class="muted">Flávio Bolsonaro</div>
+        <div class="score" id="f1">—</div>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">Lula</div>
+        <div class="score" id="l1">—</div>
+      </div>
+    </div>
+    <div class="status" id="meta1">Buscando dados…</div>
   </div>
 
-  <div class="cards">
-    <div class="card">
-      <div class="card-label">Urnas apuradas</div>
-      <div class="card-value" id="urnasPercent">—</div>
-      <div class="card-small" id="urnasCount">
-        Aguardando dados oficiais
+  <div class="card">
+    <div class="row">
+      <h2>2º turno · apuração</h2>
+      <span class="pill" id="s2">Carregando…</span>
+    </div>
+    <div class="row">
+      <div>
+        <div class="muted">Flávio Bolsonaro</div>
+        <div class="score" id="f2">—</div>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">Lula</div>
+        <div class="score" id="l2">—</div>
       </div>
     </div>
+    <div class="status" id="meta2">Buscando dados…</div>
+  </div>
+</section>
 
-    <div class="card">
-      <div class="card-label">Última consulta</div>
-      <div class="card-value" id="lastUpdate"
-           style="font-size:22px">—</div>
-      <div class="card-small" id="updateInfo">
-        Atualização a cada 60 segundos
-      </div>
-    </div>
+<section class="card">
+  <div class="row">
+    <h2>Curva da apuração</h2>
+    <span class="pill" id="chartStatus">Preparando gráfico</span>
   </div>
 
-  <section>
-    <h2>Resultado do segundo turno</h2>
-
-    <div class="result-card">
-
-      <div class="candidate">
-        <div class="candidate-title">
-          <span class="candidate-name">FLÁVIO BOLSONARO</span>
-          <strong id="flavioPercent">Aguardando dados</strong>
-        </div>
-
-        <div class="track">
-          <div class="fill flavio-fill" id="flavioBar"></div>
-        </div>
-
-        <div class="card-small" id="flavioVotes"
-             style="margin-top:5px"></div>
-      </div>
-
-      <div class="candidate">
-        <div class="candidate-title">
-          <span class="candidate-name">LULA</span>
-          <strong id="lulaPercent">Aguardando dados</strong>
-        </div>
-
-        <div class="track">
-          <div class="fill lula-fill" id="lulaBar"></div>
-        </div>
-
-        <div class="card-small" id="lulaVotes"
-             style="margin-top:5px"></div>
-      </div>
-
-    </div>
-  </section>
-
-  <section>
-    <h2>Evolução da votação</h2>
-
-    <p>
-      O gráfico mostra a variação do percentual de votos válidos
-      de cada candidato à medida que avança a apuração.
-      As linhas de referência representam o primeiro turno e uma
-      projeção matemática baseada exclusivamente nos percentuais
-      dos dois finalistas naquele turno.
-    </p>
-
-    <div class="chart-legend">
-      <span class="legend-item">
-        <span class="dot" style="background:#60a5fa"></span>
-        Flávio — 1º turno
-      </span>
-
-      <span class="legend-item">
-        <span class="dot" style="background:#fbbf24"></span>
-        Flávio — projeção
-      </span>
-
-      <span class="legend-item">
-        <span class="dot" style="background:#34d399"></span>
-        Flávio — resultado real
-      </span>
-
-      <span class="legend-item">
-        <span class="dot" style="background:#fb7185"></span>
-        Lula — resultado real
-      </span>
-
-      <span class="legend-item">
-        <span class="dot" style="background:#c084fc"></span>
-        Lula — 1º turno
-      </span>
-    </div>
-
-    <div class="chart-card">
-      <svg id="chart"
-           viewBox="0 0 700 390"
-           role="img"
-           aria-label="Gráfico da evolução dos votos dos candidatos">
-      </svg>
-
-      <p class="chart-caption">
-        Eixo horizontal: percentual de urnas apuradas.
-        Eixo vertical: percentual de votos válidos.
-        Os pontos reais são registrados a cada nova geração
-        dos arquivos oficiais consultados.
-      </p>
-    </div>
-  </section>
-
-  <section>
-    <h2>Projeção de referência</h2>
-
-    <div class="result-card projection-card">
-      <div id="projectionText">
-        Aguardando os dados do primeiro turno.
-      </div>
-
-      <p class="small-note">
-        A projeção normaliza os percentuais do primeiro turno
-        considerando apenas os dois candidatos finalistas.
-        Não representa previsão oficial nem estimativa estatística
-        do resultado final.
-      </p>
-    </div>
-  </section>
-
-  <section>
-    <h2>Projeção e resultados a cada 10% de urnas</h2>
-
-    <p>
-      A tabela utiliza os registros históricos do próprio navegador.
-      Em cada marco, apresenta a primeira consulta registrada
-      com percentual de urnas igual ou superior ao marco.
-    </p>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Urnas</th>
-            <th>Flávio real</th>
-            <th>Lula real</th>
-            <th>Projeção Flávio</th>
-            <th>Projeção Lula</th>
-          </tr>
-        </thead>
-
-        <tbody id="milestones">
-          <tr>
-            <td colspan="5">Aguardando dados oficiais.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <section>
-    <h2>Histórico da apuração</h2>
-
-    <div class="result-card">
-      <div id="historyInfo">
-        Nenhum ponto de apuração registrado nesta sessão do painel.
-      </div>
-
-      <div class="button-row">
-        <button id="clearHistory" type="button">
-          Limpar histórico local
-        </button>
-      </div>
-
-      <p class="small-note">
-        O histórico é armazenado apenas neste navegador.
-        Limpar os dados do site ou utilizar outro dispositivo
-        pode apagar ou alterar o histórico disponível.
-      </p>
-    </div>
-  </section>
-
-  <div class="button-row">
-    <button id="refreshButton" type="button">
-      Consultar agora
-    </button>
-
-    <span id="refreshStatus">
-      Atualização automática a cada 60 segundos.
-    </span>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--blue)"></i>Flávio · 2º turno</span>
+    <span><i class="dot" style="background:var(--red)"></i>Lula · 2º turno</span>
+    <span><i class="dot" style="background:var(--gold)"></i>Projeção do 1º turno</span>
   </div>
 
-  <footer>
-    <p>
-      Projeto independente, sem vínculo com o Tribunal Superior
-      Eleitoral ou com qualquer candidatura.
-    </p>
+  <div class="chart-wrap">
+    <svg id="chart" viewBox="0 0 900 430" role="img" aria-label="Gráfico de evolução da apuração"></svg>
+  </div>
 
-    <p>
-      Fonte dos resultados:
-      <a href="https://resultados.tse.jus.br/"
-         target="_blank" rel="noopener">
-        Portal oficial de resultados do TSE
-      </a>.
-    </p>
+  <div class="small" id="chartNote">
+    As amostras do segundo turno são guardadas neste navegador.
+  </div>
+</section>
 
-    <p>
-      Os resultados reais dependem da disponibilidade dos arquivos
-      públicos da Justiça Eleitoral. As linhas de referência são
-      cálculos matemáticos, não previsões oficiais.
-    </p>
+<section class="card">
+  <h2>Sobre os dados</h2>
+  <p class="small">
+    O site consulta arquivos JSON e atualiza os dados automaticamente.
+    A curva histórica completa do primeiro turno ainda depende de acesso
+    ao arquivo histórico.
+  </p>
 
-    <p>
-      A consulta depende da conexão com o servidor do TSE,
-      da disponibilidade dos arquivos e das permissões de acesso
-      do navegador.
-    </p>
-  </footer>
+  <div class="warning">
+    Este é um painel independente, não oficial do TSE.
+    Confira os resultados nas fontes oficiais da Justiça Eleitoral.
+  </div>
 
+  <p class="small" id="sourceStatus">Verificando fontes…</p>
+  <button id="refresh">Atualizar agora</button>
+</section>
+
+<footer class="small">
+  Atualização automática a cada 60 segundos · Dados sujeitos à disponibilidade das fontes.
+</footer>
 </main>
 
 <script>
-"use strict";
-
-/*
- * PAINEL DE APURAÇÃO PRESIDENCIAL 2026
- *
- * Primeiro turno: eleição 6257
- * Segundo turno: eleição 6258
- *
- * Cargo: Presidente da República, código 0001.
- *
- * Fonte oficial: arquivos JSON publicados pelo TSE.
- */
-
-const BASE = "https://resultados.tse.jus.br/oficial/ele2026";
-
 const URLS = {
-  primeiro:
-    BASE + "/6257/dados/br/br-c0001-e006257-u.json",
-
-  segundo:
-    BASE + "/6258/dados/br/br-c0001-e006258-u.json"
+  primeiro: "https://resultados.tse.jus.br/oficial/ele2026/6257/dados/br/br-c0001-e006257-u.json",
+  segundo: "https://resultados.tse.jus.br/oficial/ele2026/6258/dados/br/br-c0001-e006258-u.json"
 };
 
-const STORAGE_KEY = "apuracao_presidencial_2026_historico_v2";
+const $ = id => document.getElementById(id);
 
-const INTERVALO = 60000;
-const MAX_HISTORICO = 1000;
-
-/*
- * Valores oficiais de referência do primeiro turno.
- * Se a consulta ao arquivo do TSE falhar, estes valores
- * podem ser usados apenas como referência visual.
- */
-const REFERENCIA_INICIAL = {
-  flavio: 47.03,
-  lula: 45.16
-};
-
-let referencia = { ...REFERENCIA_INICIAL };
-let projecao = calcularProjecao(referencia);
-
-let dadosSegundoTurno = null;
-let consultando = false;
-
-let historico = carregarHistorico();
-
-let ultimoIdg = historico.length
-  ? historico[historico.length - 1].idg
-  : null;
-
-
-/* ------------------------------
-   UTILITÁRIOS
--------------------------------- */
-
-function numero(valor) {
-  if (valor === null || valor === undefined || valor === "") {
-    return NaN;
-  }
-
-  if (typeof valor === "number") {
-    return valor;
-  }
-
-  let texto = String(valor).trim();
-
-  /*
-   * Os arquivos do TSE podem usar vírgula decimal.
-   * Exemplo: "47,03" -> 47.03
-   */
-  if (texto.includes(",")) {
-    texto = texto.replace(/\./g, "").replace(",", ".");
-  }
-
-  const resultado = Number(texto);
-
-  return Number.isFinite(resultado) ? resultado : NaN;
-}
-
-
-function percentual(valor) {
-  const n = numero(valor);
-
-  if (!Number.isFinite(n)) {
-    return "—";
-  }
-
-  return n.toLocaleString("pt-BR", {
+const fmt = n =>
+  Number(n).toLocaleString("pt-BR", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }) + "%";
+
+const fmtInt = n => Number(n || 0).toLocaleString("pt-BR");
+
+const storageKey = "apuracao_presidente_2026_history_v2";
+
+let state = {
+  first: null,
+  second: null,
+  samples: []
+};
+
+function num(v) {
+  if (v === undefined || v === null || v === "") return NaN;
+  return Number(String(v).replace(",", "."));
 }
 
+function findCandidates(data) {
+  const candidates = [];
 
-function votosFormatados(valor) {
-  const n = numero(valor);
+  function walk(obj) {
+    if (!obj || typeof obj !== "object") return;
 
-  if (!Number.isFinite(n)) {
-    return "Votos: aguardando dados";
-  }
-
-  return "Votos: " + Math.round(n).toLocaleString("pt-BR");
-}
-
-
-function calcularProjecao(ref) {
-  const total = ref.flavio + ref.lula;
-
-  if (!Number.isFinite(total) || total <= 0) {
-    return { flavio: 51.01, lula: 48.99 };
-  }
-
-  const flavio = ref.flavio / total * 100;
-
-  return {
-    flavio,
-    lula: 100 - flavio
-  };
-}
-
-
-function escapar(texto) {
-  return String(texto)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-
-/* ------------------------------
-   CONSULTA AOS ARQUIVOS DO TSE
--------------------------------- */
-
-async function buscarJSON(url) {
-  const resposta = await fetch(url, {
-    method: "GET",
-    cache: "no-store",
-    headers: {
-      "Accept": "application/json"
-    }
-  });
-
-  if (!resposta.ok) {
-    throw new Error(
-      "O servidor respondeu HTTP " + resposta.status
-    );
-  }
-
-  return await resposta.json();
-}
-
-
-/*
- * Procura recursivamente os candidatos na estrutura JSON.
- *
- * No arquivo unificado do TSE, os candidatos podem estar
- * dentro de cargo, agrupamento, partido e lista de candidatos.
- */
-function procurarCandidatos(objeto, resultado = []) {
-  if (!objeto || typeof objeto !== "object") {
-    return resultado;
-  }
-
-  if (Array.isArray(objeto)) {
-    for (const item of objeto) {
-      procurarCandidatos(item, resultado);
-    }
-
-    return resultado;
-  }
-
-  if (
-    objeto.n !== undefined &&
-    objeto.pvap !== undefined &&
-    objeto.vap !== undefined
-  ) {
-    resultado.push(objeto);
-  }
-
-  for (const chave of Object.keys(objeto)) {
-    if (objeto[chave] && typeof objeto[chave] === "object") {
-      procurarCandidatos(objeto[chave], resultado);
-    }
-  }
-
-  return resultado;
-}
-
-
-function extrairCandidato(dados, numeroCandidato) {
-  const candidatos = procurarCandidatos(dados);
-
-  return candidatos.find(candidato =>
-    String(candidato.n) === String(numeroCandidato)
-  ) || null;
-}
-
-
-function extrairPercentualUrnas(dados) {
-  /*
-   * No arquivo unificado, o objeto "s" contém
-   * os dados de totalização das seções eleitorais.
-   */
-  const secao = dados.s || {};
-
-  let resultado = numero(secao.pst);
-
-  if (Number.isFinite(resultado)) {
-    return resultado;
-  }
-
-  const total = numero(secao.ts);
-  const apuradas = numero(secao.st);
-
-  if (
-    Number.isFinite(total) &&
-    Number.isFinite(apuradas) &&
-    total > 0
-  ) {
-    return apuradas / total * 100;
-  }
-
-  return NaN;
-}
-
-
-function extrairResultado(dados) {
-  const flavio = extrairCandidato(dados, "22");
-  const lula = extrairCandidato(dados, "13");
-
-  if (!flavio || !lula) {
-    throw new Error(
-      "Não foi possível localizar os dois candidatos no arquivo do TSE."
-    );
-  }
-
-  const urnas = extrairPercentualUrnas(dados);
-
-  return {
-    idg: String(dados.idg || ""),
-    dataGeracao: dados.dg || "",
-    horaGeracao: dados.hg || "",
-
-    urnas,
-
-    flavio: numero(flavio.pvap),
-    lula: numero(lula.pvap),
-
-    votosFlavio: numero(flavio.vap),
-    votosLula: numero(lula.vap),
-
-    secoesApuradas: numero((dados.s || {}).st),
-    secoesTotal: numero((dados.s || {}).ts)
-  };
-}
-
-
-/* ------------------------------
-   HISTÓRICO LOCAL
--------------------------------- */
-
-function carregarHistorico() {
-  try {
-    const salvo = localStorage.getItem(STORAGE_KEY);
-
-    if (!salvo) {
-      return [];
-    }
-
-    const lista = JSON.parse(salvo);
-
-    if (!Array.isArray(lista)) {
-      return [];
-    }
-
-    return lista.filter(ponto =>
-      Number.isFinite(ponto.urnas) &&
-      Number.isFinite(ponto.flavio) &&
-      Number.isFinite(ponto.lula)
-    ).slice(-MAX_HISTORICO);
-
-  } catch (erro) {
-    console.warn("Não foi possível carregar o histórico:", erro);
-    return [];
-  }
-}
-
-
-function salvarHistorico() {
-  try {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(historico.slice(-MAX_HISTORICO))
-    );
-
-    return true;
-
-  } catch (erro) {
-    console.warn("Não foi possível salvar o histórico:", erro);
-    return false;
-  }
-}
-
-
-function registrarHistorico(resultado) {
-  /*
-   * Não registra repetidamente a mesma geração do TSE.
-   */
-  if (resultado.idg && resultado.idg === ultimoIdg) {
-    return false;
-  }
-
-  /*
-   * Evita gravar pontos se os dados não contêm percentuais
-   * válidos ou se o arquivo ainda não registra votos.
-   */
-  if (
-    !Number.isFinite(resultado.urnas) ||
-    !Number.isFinite(resultado.flavio) ||
-    !Number.isFinite(resultado.lula)
-  ) {
-    return false;
-  }
-
-  const votosDisponiveis =
-    Number.isFinite(resultado.votosFlavio) &&
-    Number.isFinite(resultado.votosLula) &&
-    resultado.votosFlavio + resultado.votosLula > 0;
-
-  if (!votosDisponiveis) {
-    return false;
-  }
-
-  const ponto = {
-    idg: resultado.idg,
-    hora: new Date().toISOString(),
-    urnas: resultado.urnas,
-    flavio: resultado.flavio,
-    lula: resultado.lula
-  };
-
-  historico.push(ponto);
-
-  if (historico.length > MAX_HISTORICO) {
-    historico = historico.slice(-MAX_HISTORICO);
-  }
-
-  ultimoIdg = resultado.idg;
-
-  salvarHistorico();
-
-  return true;
-}
-
-
-/* ------------------------------
-   PRIMEIRO TURNO E REFERÊNCIAS
--------------------------------- */
-
-async function atualizarReferencia() {
-  try {
-    const dados = await buscarJSON(URLS.primeiro);
-
-    const flavio = extrairCandidato(dados, "22");
-    const lula = extrairCandidato(dados, "13");
-
-    if (!flavio || !lula) {
-      throw new Error("Candidatos não encontrados no primeiro turno.");
-    }
-
-    const percentualFlavio = numero(flavio.pvap);
-    const percentualLula = numero(lula.pvap);
-
-    if (
-      !Number.isFinite(percentualFlavio) ||
-      !Number.isFinite(percentualLula) ||
-      percentualFlavio <= 0 ||
-      percentualLula <= 0
-    ) {
-      throw new Error("Percentuais de referência indisponíveis.");
-    }
-
-    referencia = {
-      flavio: percentualFlavio,
-      lula: percentualLula
-    };
-
-    projecao = calcularProjecao(referencia);
-
-    document.getElementById("projectionText").textContent =
-      "FLÁVIO BOLSONARO: " +
-      percentual(projecao.flavio) +
-      " · LULA: " +
-      percentual(projecao.lula) +
-      ". Projeção matemática baseada na proporção dos votos " +
-      "dos dois finalistas no primeiro turno.";
-
-    renderizarGrafico();
-
-  } catch (erro) {
-    /*
-     * Os valores iniciais são referências conhecidas do
-     * primeiro turno. O erro é informado no console.
-     */
-    console.warn(
-      "Não foi possível atualizar a referência do primeiro turno:",
-      erro
-    );
-  }
-}
-
-
-/* ------------------------------
-   ATUALIZAÇÃO DA TELA
--------------------------------- */
-
-function atualizarPlacar(resultado) {
-  document.getElementById("urnasPercent").textContent =
-    percentual(resultado.urnas);
-
-  let secoesTexto = "Percentual informado pelo TSE";
-
-  if (
-    Number.isFinite(resultado.secoesApuradas) &&
-    Number.isFinite(resultado.secoesTotal)
-  ) {
-    secoesTexto =
-      Math.round(resultado.secoesApuradas).toLocaleString("pt-BR") +
-      " de " +
-      Math.round(resultado.secoesTotal).toLocaleString("pt-BR") +
-      " seções totalizadas";
-  }
-
-  document.getElementById("urnasCount").textContent = secoesTexto;
-
-  document.getElementById("flavioPercent").textContent =
-    percentual(resultado.flavio);
-
-  document.getElementById("lulaPercent").textContent =
-    percentual(resultado.lula);
-
-  document.getElementById("flavioVotes").textContent =
-    votosFormatados(resultado.votosFlavio);
-
-  document.getElementById("lulaVotes").textContent =
-    votosFormatados(resultado.votosLula);
-
-  document.getElementById("flavioBar").style.width =
-    Math.max(0, Math.min(100, resultado.flavio)) + "%";
-
-  document.getElementById("lulaBar").style.width =
-    Math.max(0, Math.min(100, resultado.lula)) + "%";
-}
-
-
-function atualizarAviso(titulo, texto, tipo = "") {
-  const aviso = document.getElementById("notice");
-
-  aviso.className = "notice";
-
-  if (tipo) {
-    aviso.classList.add(tipo);
-  }
-
-  document.getElementById("noticeTitle").textContent = titulo;
-  document.getElementById("noticeText").textContent = texto;
-}
-
-
-/* ------------------------------
-   GRÁFICO SVG
--------------------------------- */
-
-function criarLinha(x1, y1, x2, y2, cor, largura = 1, dash = "") {
-  return `
-    <line
-      x1="${x1}" y1="${y1}"
-      x2="${x2}" y2="${y2}"
-      stroke="${cor}"
-      stroke-width="${largura}"
-      ${dash ? `stroke-dasharray="${dash}"` : ""}
-    />
-  `;
-}
-
-
-function criarTexto(x, y, texto, tamanho = 12, ancora = "middle") {
-  return `
-    <text
-      x="${x}" y="${y}"
-      fill="#a9b8cc"
-      font-size="${tamanho}"
-      text-anchor="${ancora}"
-      font-family="system-ui, sans-serif"
-    >${escapar(texto)}</text>
-  `;
-}
-
-
-function renderizarGrafico() {
-  const svg = document.getElementById("chart");
-
-  const largura = 700;
-  const altura = 390;
-
-  const margem = {
-    esquerda: 55,
-    direita: 18,
-    topo: 20,
-    baixo: 48
-  };
-
-  const larguraPlot =
-    largura - margem.esquerda - margem.direita;
-
-  const alturaPlot =
-    altura - margem.topo - margem.baixo;
-
-  const x = valor =>
-    margem.esquerda + (valor / 100) * larguraPlot;
-
-  const y = valor =>
-    margem.topo + ((100 - valor) / 100) * alturaPlot;
-
-  let conteudo = "";
-
-  /*
-   * Grades horizontais e rótulos do eixo vertical.
-   */
-  for (let valor = 0; valor <= 100; valor += 10) {
-    const py = y(valor);
-
-    conteudo += criarLinha(
-      margem.esquerda,
-      py,
-      largura - margem.direita,
-      py,
-      "#30415c",
-      1
-    );
-
-    conteudo += criarTexto(
-      margem.esquerda - 10,
-      py + 4,
-      valor + "%",
-      12,
-      "end"
-    );
-  }
-
-  /*
-   * Marcas do eixo horizontal.
-   */
-  for (let valor = 0; valor <= 100; valor += 20) {
-    const px = x(valor);
-
-    conteudo += criarLinha(
-      px,
-      margem.topo,
-      px,
-      altura - margem.baixo,
-      "#233249",
-      1
-    );
-
-    conteudo += criarTexto(
-      px,
-      altura - margem.baixo + 22,
-      valor + "%",
-      12
-    );
-  }
-
-  /*
-   * Linha de referência do primeiro turno.
-   */
-  conteudo += criarLinha(
-    x(0), y(referencia.flavio),
-    x(100), y(referencia.flavio),
-    "#60a5fa", 2, "6 5"
-  );
-
-  conteudo += criarLinha(
-    x(0), y(referencia.lula),
-    x(100), y(referencia.lula),
-    "#c084fc", 2, "6 5"
-  );
-
-  /*
-   * Linhas de projeção normalizada.
-   */
-  conteudo += criarLinha(
-    x(0), y(projecao.flavio),
-    x(100), y(projecao.flavio),
-    "#fbbf24", 2, "9 5"
-  );
-
-  conteudo += criarLinha(
-    x(0), y(projecao.lula),
-    x(100), y(projecao.lula),
-    "#fb923c", 2, "9 5"
-  );
-
-  /*
-   * Ordena o histórico pelo avanço da apuração.
-   */
-  const pontos = historico
-    .slice()
-    .sort((a, b) => {
-      if (a.urnas !== b.urnas) {
-        return a.urnas - b.urnas;
-      }
-
-      return new Date(a.hora) - new Date(b.hora);
-    });
-
-  /*
-   * Traça as séries reais.
-   */
-  function desenharSerie(chave, cor) {
-    if (pontos.length === 0) {
-      return "";
-    }
-
-    const coordenadas = pontos.map(ponto => ({
-      x: x(Math.max(0, Math.min(100, ponto.urnas))),
-      y: y(Math.max(0, Math.min(100, ponto[chave])))
-    }));
-
-    let serie = "";
-
-    if (coordenadas.length > 1) {
-      const d = coordenadas.map((ponto, indice) =>
-        (indice === 0 ? "M" : "L") +
-        ponto.x.toFixed(2) + " " +
-        ponto.y.toFixed(2)
-      ).join(" ");
-
-      serie += `
-        <path
-          d="${d}"
-          fill="none"
-          stroke="${cor}"
-          stroke-width="3"
-          stroke-linejoin="round"
-          stroke-linecap="round"
-        />
-      `;
-    }
-
-    const ultimo = coordenadas[coordenadas.length - 1];
-
-    serie += `
-      <circle
-        cx="${ultimo.x}"
-        cy="${ultimo.y}"
-        r="5"
-        fill="${cor}"
-        stroke="#0b1120"
-        stroke-width="2"
-      />
-    `;
-
-    return serie;
-  }
-
-  conteudo += desenharSerie("flavio", "#34d399");
-  conteudo += desenharSerie("lula", "#fb7185");
-
-  /*
-   * Mensagem central quando não há dados reais.
-   */
-  if (pontos.length === 0) {
-    conteudo += `
-      <rect
-        x="${margem.esquerda + 40}"
-        y="${margem.topo + alturaPlot / 2 - 26}"
-        width="${larguraPlot - 80}"
-        height="52"
-        rx="10"
-        fill="#162135"
-        stroke="#30415c"
-      />
-
-      <text
-        x="${largura / 2}"
-        y="${margem.topo + alturaPlot / 2 - 2}"
-        fill="#a9b8cc"
-        text-anchor="middle"
-        font-size="14"
-        font-family="system-ui, sans-serif"
-      >Aguardando resultados reais</text>
-
-      <text
-        x="${largura / 2}"
-        y="${margem.topo + alturaPlot / 2 + 17}"
-        fill="#a9b8cc"
-        text-anchor="middle"
-        font-size="11"
-        font-family="system-ui, sans-serif"
-      >O gráfico será preenchido durante a apuração.</text>
-    `;
-  }
-
-  /*
-   * Títulos dos eixos.
-   */
-  conteudo += criarTexto(
-    largura / 2,
-    altura - 5,
-    "Urnas apuradas",
-    13
-  );
-
-  svg.innerHTML = conteudo;
-}
-
-
-/* ------------------------------
-   TABELA DE MARCOS
--------------------------------- */
-
-function renderizarMarcos() {
-  const tbody = document.getElementById("milestones");
-
-  if (historico.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="5">
-          Aguardando resultados reais da apuração.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-  let html = "";
-
-  for (let marco = 10; marco <= 100; marco += 10) {
-    const ponto = historico.find(item =>
-      item.urnas >= marco
-    );
-
-    html += `
-      <tr>
-        <td>${marco}%</td>
-        <td>${ponto ? percentual(ponto.flavio) : "—"}</td>
-        <td>${ponto ? percentual(ponto.lula) : "—"}</td>
-        <td>${percentual(projecao.flavio)}</td>
-        <td>${percentual(projecao.lula)}</td>
-      </tr>
-    `;
-  }
-
-  tbody.innerHTML = html;
-}
-
-
-function atualizarHistoricoInfo() {
-  const total = historico.length;
-
-  document.getElementById("historyInfo").textContent =
-    total === 0
-      ? "Nenhum resultado real registrado. O gráfico mostrará os pontos quando houver dados disponíveis."
-      : total +
-        " ponto(s) histórico(s) registrado(s) neste navegador. " +
-        "Os dados são preservados entre consultas, desde que o armazenamento local não seja apagado.";
-}
-
-
-/* ------------------------------
-   CICLO DE CONSULTA
--------------------------------- */
-
-async function consultarAgora() {
-  if (consultando) {
-    return;
-  }
-
-  consultando = true;
-
-  const botao = document.getElementById("refreshButton");
-
-  botao.disabled = true;
-  botao.textContent = "Consultando...";
-
-  document.getElementById("updateInfo").textContent =
-    "Consultando os arquivos públicos do TSE";
-
-  try {
-    /*
-     * Atualiza a referência do primeiro turno.
-     */
-    await atualizarReferencia();
-
-    /*
-     * Busca o arquivo oficial do segundo turno.
-     */
-    const dados = await buscarJSON(URLS.segundo);
-
-    const resultado = extrairResultado(dados);
-
-    dadosSegundoTurno = resultado;
-
-    const votosValidosDisponiveis =
-      Number.isFinite(resultado.votosFlavio) &&
-      Number.isFinite(resultado.votosLula) &&
-      resultado.votosFlavio + resultado.votosLula > 0;
-
-    const percentualDisponivel =
-      Number.isFinite(resultado.flavio) &&
-      Number.isFinite(resultado.lula);
-
-    /*
-     * Só mostra os números como resultado de votação
-     * quando o arquivo contém dados utilizáveis.
-     */
-    if (
-      votosValidosDisponiveis &&
-      percentualDisponivel
-    ) {
-      atualizarPlacar(resultado);
-
-      registrarHistorico(resultado);
-
-      atualizarAviso(
-        "Dados consultados no TSE.",
-        "Geração do arquivo: " +
-        resultado.dataGeracao + " " +
-        resultado.horaGeracao +
-        ". Última consulta local: " +
-        new Date().toLocaleTimeString("pt-BR") + ".",
-        "status-ok"
-      );
-
-    } else {
-      /*
-       * Um arquivo pode existir antes de começar a totalização.
-       * Nesse caso, zero não significa que alguém perdeu.
-       */
-      document.getElementById("urnasPercent").textContent =
-        percentual(resultado.urnas);
-
-      document.getElementById("urnasCount").textContent =
-        "Aguardando votos totalizados";
-
-      document.getElementById("flavioPercent").textContent =
-        "Aguardando apuração";
-
-      document.getElementById("lulaPercent").textContent =
-        "Aguardando apuração";
-
-      document.getElementById("flavioVotes").textContent =
-        "";
-
-      document.getElementById("lulaVotes").textContent =
-        "";
-
-      document.getElementById("flavioBar").style.width = "0%";
-      document.getElementById("lulaBar").style.width = "0%";
-
-      atualizarAviso(
-        "Arquivo oficial encontrado, mas sem votos totalizados.",
-        "O painel continuará consultando o TSE. Os valores zero do arquivo não serão apresentados como resultado eleitoral definitivo."
-      );
-    }
-
-    document.getElementById("lastUpdate").textContent =
-      new Date().toLocaleTimeString("pt-BR");
-
-    document.getElementById("updateInfo").textContent =
-      "Atualização automática a cada 60 segundos";
-
-    document.getElementById("refreshStatus").textContent =
-      "Consulta concluída.";
-
-  } catch (erro) {
-    console.error("Erro na consulta ao TSE:", erro);
-
-    atualizarAviso(
-      "Não foi possível atualizar os dados.",
-      "Verifique sua conexão e a disponibilidade dos arquivos públicos do TSE. O painel não inventará resultados nem substituirá dados ausentes por zeros.",
-      "status-error"
-    );
-
-    document.getElementById("refreshStatus").textContent =
-      "Falha na consulta. Nova tentativa automática em breve.";
-
-  } finally {
-    consultando = false;
-
-    botao.disabled = false;
-    botao.textContent = "Consultar agora";
-
-    renderizarGrafico();
-    renderizarMarcos();
-    atualizarHistoricoInfo();
-  }
-}
-
-
-/* ------------------------------
-   EVENTOS E INICIALIZAÇÃO
--------------------------------- */
-
-document.getElementById("refreshButton")
-  .addEventListener("click", consultarAgora);
-
-
-document.getElementById("clearHistory")
-  .addEventListener("click", () => {
-    const confirmar = window.confirm(
-      "Deseja apagar o histórico de apuração armazenado neste navegador?"
-    );
-
-    if (!confirmar) {
+    if (Array.isArray(obj)) {
+      obj.forEach(walk);
       return;
     }
 
-    historico = [];
-    ultimoIdg = null;
+    const keys = Object.keys(obj);
 
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch (erro) {
-      console.warn("Não foi possível limpar o armazenamento:", erro);
+    if (keys.some(k =>
+      ["n", "nm", "vap", "pvap", "cand", "candidato"]
+        .includes(k.toLowerCase())
+    )) {
+      const name = obj.nm || obj.nome || obj.candidato || obj.cand || "";
+      const number = String(obj.n || obj.numero || obj.num || "");
+      const votes = num(obj.vap || obj.votos || obj.votosNominais || obj.qtVotos);
+      const pct = num(obj.pvap || obj.pct || obj.percentual || obj.porcentagem);
+
+      if (name || number) {
+        candidates.push({ name: String(name), number, votes, pct });
+      }
     }
 
-    renderizarGrafico();
-    renderizarMarcos();
-    atualizarHistoricoInfo();
-  });
+    for (const k of keys) {
+      if (obj[k] && typeof obj[k] === "object") walk(obj[k]);
+    }
+  }
 
+  walk(data);
 
-/*
- * Se a tela for redimensionada ou o celular girar,
- * o SVG continuará responsivo.
- */
-window.addEventListener("resize", renderizarGrafico);
+  const unique = new Map();
+  candidates.forEach(c => unique.set(c.number + "|" + c.name, c));
 
+  return [...unique.values()];
+}
 
-/*
- * Inicialização:
- * 1. Desenha o gráfico de referência.
- * 2. Mostra o histórico salvo.
- * 3. Consulta os arquivos oficiais.
- * 4. Repete a consulta a cada 60 segundos.
- */
-renderizarGrafico();
-renderizarMarcos();
-atualizarHistoricoInfo();
+function getTotals(data) {
+  const all = findCandidates(data);
 
-consultarAgora();
+  function match(number, words) {
+    return all.find(c => c.number === number) ||
+      all.find(c => words.some(w => c.name.toLowerCase().includes(w)));
+  }
 
-setInterval(consultarAgora, INTERVALO);
+  const f = match("22", ["flávio", "flavio"]);
+  const l = match("13", ["lula"]);
 
+  const totalValid =
+    num(data?.vvc) ||
+    num(data?.votosValidos) ||
+    num(data?.vv);
+
+  let fp = f?.pct;
+  let lp = l?.pct;
+
+  if (!Number.isFinite(fp) && Number.isFinite(f?.votes) && totalValid > 0) {
+    fp = f.votes / totalValid * 100;
+  }
+
+  if (!Number.isFinite(lp) && Number.isFinite(l?.votes) && totalValid > 0) {
+    lp = l.votes / totalValid * 100;
+  }
+
+  if (Number.isFinite(fp) && fp > 100) fp /= 100;
+  if (Number.isFinite(lp) && lp > 100) lp /= 100;
+
+  const sections =
+    num(data?.s) ||
+    num(data?.secoesApuradas) ||
+    num(data?.st);
+
+  return {
+    f: fp,
+    l: lp,
+    fVotes: f?.votes,
+    lVotes: l?.votes,
+    sections,
+    all
+  };
+}
+
+async function fetchJSON(url) {
+  const response = await fetch(url, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+  }
+
+  return await response.json();
+}
+
+function loadSaved() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    if (Array.isArray(saved)) state.samples = saved;
+  } catch (e) {
+    state.samples = [];
+  }
+}
+
+function saveSample() {
+  const s = state.second;
+
+  if (!s || !Number.isFinite(s.f) || !Number.isFinite(s.l)) return;
+
+  const sample = {
+    t: Date.now(),
+    f: s.f,
+    l: s.l,
+    sections: s.sections
+  };
+
+  const last = state.samples[state.samples.length - 1];
+
+  if (
+    !last ||
+    Math.abs(last.f - sample.f) > 0.001 ||
+    Math.abs(last.l - sample.l) > 0.001 ||
+    Date.now() - last.t > 120000
+  ) {
+    state.samples.push(sample);
+  }
+
+  state.samples = state.samples
+    .filter(x => Date.now() - x.t < 36 * 60 * 60 * 1000)
+    .slice(-600);
+
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(state.samples));
+  } catch (e) {}
+}
+
+function firstRoundReference() {
+  if (
+    state.first &&
+    Number.isFinite(state.first.f) &&
+    Number.isFinite(state.first.l)
+  ) {
+    return {
+      f: state.first.f,
+      l: state.first.l,
+      source: "TSE"
+    };
+  }
+
+  return {
+    f: 47.03,
+    l: 45.16,
+    source: "referência de fallback"
+  };
+}
+
+function normalizedProjection(p) {
+  const sum = p.f + p.l;
+
+  if (sum <= 0) return { f: 50, l: 50 };
+
+  return {
+    f: p.f / sum * 100,
+    l: p.l / sum * 100
+  };
+}
+
+function render() {
+  const first = firstRoundReference();
+  const second = state.second;
+
+  $("f1").textContent = fmt(first.f);
+  $("l1").textContent = fmt(first.l);
+
+  $("s1").textContent =
+    first.source === "TSE" ? "Consultado" : "Referência";
+
+  $("meta1").textContent =
+    first.source === "TSE"
+      ? "Dados do arquivo consultado."
+      : "Referência provisória: 47,03% e 45,16%.";
+
+  if (second) {
+    $("f2").textContent =
+      Number.isFinite(second.f) ? fmt(second.f) : "—";
+
+    $("l2").textContent =
+      Number.isFinite(second.l) ? fmt(second.l) : "—";
+
+    $("s2").textContent = "Última consulta";
+
+    $("meta2").textContent =
+      "Seções apuradas: " +
+      (Number.isFinite(second.sections) ? fmtInt(second.sections) : "—");
+  }
+
+  drawChart(first);
+}
+
+function drawChart(first) {
+  const svg = $("chart");
+  const W = 900;
+  const H = 430;
+  const pad = { l: 58, r: 22, t: 28, b: 48 };
+  const cw = W - pad.l - pad.r;
+  const ch = H - pad.t - pad.b;
+
+  const samples = state.samples.slice();
+
+  if (
+    state.second &&
+    (!samples.length ||
+      samples[samples.length - 1].f !== state.second.f ||
+      samples[samples.length - 1].l !== state.second.l)
+  ) {
+    samples.push({
+      t: Date.now(),
+      f: state.second.f,
+      l: state.second.l
+    });
+  }
+
+  const projection = normalizedProjection(first);
+  const x = i => pad.l + (samples.length <= 1 ? cw : i / (samples.length - 1) * cw);
+  const y = v => pad.t + (100 - v) / 100 * ch;
+
+  let out = "";
+
+  for (let v = 0; v <= 100; v += 20) {
+    out += `
+      <line x1="${pad.l}" y1="${y(v)}" x2="${W - pad.r}" y2="${y(v)}"
+        stroke="#26364a" stroke-width="1"/>
+      <text x="${pad.l - 10}" y="${y(v) + 4}" text-anchor="end"
+        fill="#9fb0c5" font-size="12">${v}%</text>`;
+  }
+
+  // Projeção que repete a proporção entre os dois candidatos no primeiro turno.
+  out += `
+    <line x1="${pad.l}" y1="${y(projection.f)}" x2="${W - pad.r}" y2="${y(projection.f)}"
+      stroke="#fbbf24" stroke-width="2" stroke-dasharray="7 6"/>
+    <line x1="${pad.l}" y1="${y(projection.l)}" x2="${W - pad.r}" y2="${y(projection.l)}"
+      stroke="#fbbf24" stroke-width="2" stroke-dasharray="7 6" opacity=".65"/>`;
+
+  // Linhas de referência dos percentuais finais do primeiro turno.
+  out += `
+    <line x1="${pad.l}" y1="${y(first.f)}" x2="${W - pad.r}" y2="${y(first.f)}"
+      stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="3 5" opacity=".7"/>
+    <line x1="${pad.l}" y1="${y(first.l)}" x2="${W - pad.r}" y2="${y(first.l)}"
+      stroke="#f87171" stroke-width="1.5" stroke-dasharray="3 5" opacity=".7"/>`;
+
+  function makePath(key) {
+    if (!samples.length) return "";
+
+    return samples.map((p, i) =>
+      (i ? "L" : "M") + " " +
+      x(i).toFixed(1) + " " +
+      y(p[key]).toFixed(1)
+    ).join(" ");
+  }
+
+  if (samples.length) {
+    out += `
+      <path d="${makePath("f")}" fill="none" stroke="#60a5fa"
+        stroke-width="3" stroke-linejoin="round"/>
+      <path d="${makePath("l")}" fill="none" stroke="#f87171"
+        stroke-width="3" stroke-linejoin="round"/>`;
+  }
+
+  out += `
+    <text x="${pad.l}" y="${H - 15}" fill="#9fb0c5" font-size="12">
+      Amostras guardadas neste navegador: ${samples.length}
+    </text>
+    <text x="${W - pad.r}" y="16" text-anchor="end" fill="#fbbf24" font-size="12">
+      Projeção: Flávio ${projection.f.toFixed(2)}% · Lula ${projection.l.toFixed(2)}%
+    </text>`;
+
+  svg.innerHTML = out;
+
+  $("chartStatus").textContent =
+    samples.length > 1 ? "Curva do 2º turno ativa" : "Aguardando novas amostras";
+
+  $("chartNote").textContent =
+    "As curvas coloridas mostram consultas do segundo turno feitas neste navegador. " +
+    "As linhas tracejadas são referências do primeiro turno e projeção proporcional. " +
+    "A curva histórica completa do primeiro turno ainda não está integrada.";
+}
+
+async function update() {
+  $("s1").textContent = "Consultando";
+  $("s2").textContent = "Consultando";
+
+  const results = await Promise.allSettled([
+    fetchJSON(URLS.primeiro),
+    fetchJSON(URLS.segundo)
+  ]);
+
+  if (results[0].status === "fulfilled") {
+    state.first = getTotals(results[0].value);
+    $("s1").textContent = "Consultado";
+  } else {
+    $("s1").textContent = "Indisponível";
+    $("meta1").textContent =
+      "Não foi possível consultar o arquivo do primeiro turno.";
+  }
+
+  if (results[1].status === "fulfilled") {
+    state.second = getTotals(results[1].value);
+    saveSample();
+    $("s2").textContent = "Consultado";
+  } else {
+    $("s2").textContent = "Indisponível";
+    $("meta2").textContent =
+      "Não foi possível consultar o arquivo do segundo turno.";
+  }
+
+  render();
+
+  $("sourceStatus").textContent =
+    "Última tentativa: " + new Date().toLocaleTimeString("pt-BR");
+}
+
+loadSaved();
+
+$("refresh").addEventListener("click", update);
+
+update();
+
+setInterval(update, 60000);
 </script>
-
 </body>
 </html>
